@@ -1,0 +1,14 @@
+endpoint: 'http://hello/api/'
+routes:
+  - method: GET
+    path: !ruby/regexp /^\/hello\/(?<final_path>.*)/
+    request:
+      path: '%{final_path}'
+  - method: GET
+    path: !ruby/regexp /^\/outside\/(?<final_path>.*)/
+    request:
+      path: '%{final_path}'
+      endpoint: 'http://outside/api/'
+  - method: POST
+    responder: forbidden
+    raise: Error::Forbidden
