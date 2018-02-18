@@ -1,0 +1,13 @@
+require: rubocop-rspec
+inherit_from: ../.rubocop.yml
+
+Metrics/BlockLength:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+RSpec/NamedSubject:
+  Enabled: false
+
+Style/BlockDelimiters:
+  Enabled: false
