@@ -24,15 +24,20 @@ module ApiValve
 
     def build_routes_from_config(config)
       config['routes'].each do |route_config|
-        route_from_config route_config
+        method, path_regexp, req_conf = *route_config.values_at('method', 'path', 'request')
+        if route_config['raise']
+          deny method, path_regexp, with: route_config['raise']
+        else
+          forward method, path_regexp, req_conf
+        end
       end
       forward_all
     end
 
-    def forward(methods, regexp = nil, config = {})
+    def forward(methods, path_regexp = nil, config = {})
       Array.wrap(methods).each do |method|
-        router.public_send(method, regexp, proc { |request, match_data|
-          forwarder.call request, {'match_data' => match_data}.merge(config)
+        router.public_send(method, path_regexp, proc { |request, match_data|
+          forwarder.call request, {'match_data' => match_data}.merge(config || {})
         })
       end
     end
@@ -43,12 +48,9 @@ module ApiValve
       end
     end
 
-    private
-
-    def route_from_config(route_config)
-      router.public_send route_config['method'].downcase, route_config['path'] do |req, match_data|
-        raise ApiValve.const_get(route_config['raise']) if route_config['raise']
-        forwarder.call req, {'match_data' => match_data}.merge(route_config['request'])
+    def deny(methods, path_regexp = nil, with: 'Error::Forbidden')
+      Array.wrap(methods).each do |method|
+        router.public_send(method, path_regexp, ->(*_args) { raise ApiValve.const_get(with) })
       end
     end
   end
