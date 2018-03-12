@@ -4,10 +4,11 @@ module ApiValve
 
     class << self
       def from_yaml(file_path)
-        from_config YAML.load_file(file_path)
+        from_hash YAML.load_file(file_path)
       end
 
-      def from_config(config)
+      def from_hash(config)
+        config = config.with_indifferent_access
         forwarder = Forwarder.new(config.slice(*FORWARDER_OPTIONS))
         new(forwarder).tap { |proxy| proxy.build_routes_from_config config }
       end
@@ -23,7 +24,7 @@ module ApiValve
     delegate :add_route, :call, to: :router
 
     def build_routes_from_config(config)
-      config['routes'].each do |route_config|
+      config['routes']&.each do |route_config|
         method, path_regexp, req_conf = *route_config.values_at('method', 'path', 'request')
         if route_config['raise']
           deny method, path_regexp, with: route_config['raise']

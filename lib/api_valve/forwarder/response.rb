@@ -17,6 +17,8 @@ module ApiValve
       [status, headers, [body]]
     end
 
+    private
+
     def status
       original_response.status
     end

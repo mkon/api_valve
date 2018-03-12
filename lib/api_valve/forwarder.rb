@@ -3,22 +3,27 @@ module ApiValve
     autoload :Request,  'api_valve/forwarder/request'
     autoload :Response, 'api_valve/forwarder/response'
 
-    attr_accessor :endpoint
+    DEFAULT_OPTIONS = {
+      response_klass: Response,
+      request_klass: Request
+    }.freeze
+
+    attr_accessor :endpoint, :response_klass, :request_klass
 
     def initialize(options = {})
-      options.each do |k, v|
+      DEFAULT_OPTIONS.merge(options).each do |k, v|
         public_send("#{k}=", v)
       end
     end
 
     def call(original_request, request_options = {})
-      Response.new(run_request(original_request, request_options)).rack_response
+      response_klass.new(run_request(original_request, request_options)).rack_response
     end
 
     private
 
     def run_request(original_request, request_options)
-      request = Request.new(original_request, request_options)
+      request = request_klass.new(original_request, request_options)
       faraday.run_request(request.method, request.path, request.body, request.headers) do |req|
         req.params.update(request.url_params) if request.url_params
       end
