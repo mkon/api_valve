@@ -7,7 +7,12 @@ module ApiValve
     WHITELISTED_HEADERS = %w(
       Accept
       Content-Type
+      Forwarded
       User-Agent
+      X-Forwarded-For
+      X-Forwarded-Host
+      X-Forwarded-Port
+      X-Forwarded-Proto
     ).freeze
     NOT_PREFIXED_HEADERS = %w(
       Content-Length
@@ -16,7 +21,7 @@ module ApiValve
 
     def initialize(original_request, options = {})
       @original_request = original_request
-      @options = options
+      @options = default_options.merge options
     end
 
     def method
@@ -34,7 +39,7 @@ module ApiValve
     end
 
     def headers
-      WHITELISTED_HEADERS.each_with_object({}) do |key, h|
+      whitelisted_headers.each_with_object({}) do |key, h|
         h[key] = header(key)
       end.merge('X-Request-Id' => Thread.current[:request_id]).compact
     end
@@ -53,6 +58,18 @@ module ApiValve
     def url_params
       return unless original_request.query_string.present?
       @url_params ||= Rack::Utils.parse_nested_query(original_request.query_string)
+    end
+
+    private
+
+    def whitelisted_headers
+      @options[:whitelisted_headers]
+    end
+
+    def default_options
+      {
+        whitelisted_headers: WHITELISTED_HEADERS
+      }
     end
   end
 end

@@ -17,4 +17,6 @@ module RSpecMixin
   include Rack::Test::Methods
 end
 
+ApiValve.logger = Logger.new('/dev/null')
+
 RSpec.configure { |c| c.include RSpecMixin }
