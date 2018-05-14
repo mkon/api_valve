@@ -6,5 +6,11 @@ Simply run
 rackup -p 8080
 ```
 
-As you can see from the `config.ru`, it will forward all requests from _/oauth/_ to _http://auth.host/oauth/_,
-and all requests from _/api/_ to _http://api.host/api/_.
+As you can see from the `config.ru`, it will forward all requests according to this table:
+
+| Route          | Target                        |
+|----------------|-------------------------------|
+| /oauth/        | http://auth.host/oauth/       |
+| /oauth/token   | http://auth.host/oauth/token  |
+| /api/          | http://api.host/api/          |
+| /api/something | http://api.host/api/something |
