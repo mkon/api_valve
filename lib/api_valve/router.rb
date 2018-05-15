@@ -68,7 +68,7 @@ module ApiValve
           return route.call request, match_data
         end
       end
-      raise Error::EndpointNotFound
+      raise Error::NotFound, 'Endpoint not found'
     end
   end
 end

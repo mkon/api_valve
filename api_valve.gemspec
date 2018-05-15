@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'activesupport', '>= 5.0.2', '< 6'
   s.add_dependency 'faraday', '~> 0.14'
+  s.add_dependency 'multi_json'
   s.add_dependency 'rack', '~> 2'
 
   s.add_development_dependency 'rack-test', '~> 0'

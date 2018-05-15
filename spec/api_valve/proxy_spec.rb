@@ -33,7 +33,8 @@ RSpec.describe ApiValve::Proxy do
     end
 
     it 'does forbidden' do
-      expect { post '/' }.to raise_error(ApiValve::Error::Forbidden)
+      post '/'
+      expect(last_response).to be_forbidden
       expect(WebMock).not_to have_requested(:get, %r{^http://hello/api/})
     end
   end

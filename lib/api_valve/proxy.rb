@@ -1,5 +1,9 @@
+require 'byebug'
+
 module ApiValve
   class Proxy
+    include ActiveSupport::Rescuable
+
     FORWARDER_OPTIONS = %w(endpoint).freeze
 
     class << self
@@ -21,7 +25,13 @@ module ApiValve
       @router = Router.new
     end
 
-    delegate :add_route, :call, to: :router
+    def call(*args)
+      @router.call(*args)
+    rescue ApiValve::Error::Base => e
+      ErrorResponder.new(e).call
+    end
+
+    delegate :add_route, to: :router
 
     def build_routes_from_config(config)
       config['routes']&.each do |route_config|

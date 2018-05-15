@@ -1,6 +1,8 @@
 require 'api_valve'
 
 app = Rack::Builder.new do
+  use ApiValve::Middleware::ErrorHandling
+
   map '/api' do
     run ApiValve::Proxy.from_hash(
       endpoint: 'http://api.host/api/',

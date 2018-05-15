@@ -36,10 +36,10 @@ RSpec.describe ApiValve::Router do
           expect(route_proc).not_to have_received(:call)
         end
 
-        it 'raises ApiValve::Error::EndpointNotFound if no patch matches' do
+        it 'raises ApiValve::Error::NotFound if no patch matches' do
           expect {
             public_send(method, '/doesnotexist/path/somewhere')
-          }.to raise_error(ApiValve::Error::EndpointNotFound)
+          }.to raise_error(ApiValve::Error::NotFound)
         end
       end
     end
