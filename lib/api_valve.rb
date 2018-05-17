@@ -1,5 +1,4 @@
 require 'active_support/configurable'
-require 'active_support/configurable'
 require 'active_support/core_ext/class'
 require 'active_support/core_ext/hash'
 require 'active_support/core_ext/object'
