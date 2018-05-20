@@ -4,7 +4,7 @@ module ApiValve
   class Proxy
     include ActiveSupport::Callbacks
 
-    FORWARDER_OPTIONS = %w(endpoint request response).freeze
+    FORWARDER_OPTIONS = %w(endpoint request response permission_handler).freeze
 
     define_callbacks :call
 

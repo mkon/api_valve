@@ -2,6 +2,8 @@ module ApiValve
   # Wraps original request
   # Responsible for altering the request before it is forwarded
   class Forwarder::Request
+    include Forwarder::PermissionHandler::RequestIntegration
+
     attr_reader :original_request, :options
 
     WHITELISTED_HEADERS = %w(
@@ -22,6 +24,10 @@ module ApiValve
     def initialize(original_request, options = {})
       @original_request = original_request
       @options = options.with_indifferent_access
+    end
+
+    def allowed?
+      permission_handler.request_allowed?
     end
 
     def method

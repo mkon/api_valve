@@ -2,6 +2,8 @@ module ApiValve
   # Wraps faraday response
   # Responsible for altering the response before it is returned
   class Forwarder::Response
+    include Forwarder::PermissionHandler::RequestIntegration
+
     attr_reader :original_request, :original_response
 
     WHITELISTED_HEADERS = %w(

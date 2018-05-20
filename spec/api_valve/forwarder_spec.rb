@@ -9,7 +9,8 @@ RSpec.describe ApiValve::Forwarder do
       path: 'some/path/abc',
       url_params: {'foo' => 'bar'},
       body: '',
-      headers: {}
+      headers: {},
+      allowed?: true
     )
   end
   let(:response_klass) { Class.new(ApiValve::Forwarder::Response) }
@@ -28,8 +29,9 @@ RSpec.describe ApiValve::Forwarder do
     }
   end
   let(:original_request) do
-    instance_double(Rack::Request)
+    instance_double(Rack::Request, env: env)
   end
+  let(:env) { {} }
 
   before do
     stub_request(:get, %r{^http://host/api/}).to_return(status: 204)
@@ -49,5 +51,13 @@ RSpec.describe ApiValve::Forwarder do
     it { is_expected.to have_requested(:get, 'http://host/api/some/path/abc?foo=bar') }
 
     it { is_expected.to eq rack_response }
+
+    context 'when the request is not allowed' do
+      before { allow(request_klass_instance).to receive(:allowed?).and_return(false) }
+
+      it 'raises an Forbidden error' do
+        expect { subject }.to raise_error(ApiValve::Error::Forbidden)
+      end
+    end
   end
 end

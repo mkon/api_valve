@@ -1,7 +1,8 @@
 module ApiValve
   class Forwarder
-    autoload :Request,  'api_valve/forwarder/request'
-    autoload :Response, 'api_valve/forwarder/response'
+    autoload :PermissionHandler, 'api_valve/forwarder/permission_handler'
+    autoload :Request,           'api_valve/forwarder/request'
+    autoload :Response,          'api_valve/forwarder/response'
 
     include Benchmarking
 
@@ -11,6 +12,7 @@ module ApiValve
 
     def call(original_request, local_options = {})
       request = request_klass.new(original_request, request_options.deep_merge(local_options))
+      raise Error::Forbidden unless request.allowed?
       response_klass.new(original_request, run_request(request), response_options).rack_response
     end
 
@@ -21,7 +23,8 @@ module ApiValve
     end
 
     def request_options
-      (@options[:request] || {}).merge(@options[:permission_handler] || {})
+      # integrate permission handler options as it is instantiated in the request
+      (@options[:request] || {}).merge(@options.slice(:permission_handler))
     end
 
     def response_klass
@@ -29,7 +32,8 @@ module ApiValve
     end
 
     def response_options
-      (@options[:response] || {}).merge(@options[:permission_handler] || {})
+      # integrate permission handler options as it is instantiated in the response
+      (@options[:response] || {}).merge(@options.slice(:permission_handler) || {})
     end
 
     def run_request(request)
