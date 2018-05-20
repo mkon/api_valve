@@ -5,31 +5,32 @@ module ApiValve
 
     include Benchmarking
 
-    DEFAULT_OPTIONS = {
-      response_klass: Response,
-      request_klass: Request
-    }.freeze
-
-    attr_accessor :response_klass, :request_klass
-    attr_reader :endpoint
-
     def initialize(options = {})
-      DEFAULT_OPTIONS.merge(options).each do |k, v|
-        public_send("#{k}=", v)
-      end
+      @options = options.with_indifferent_access
     end
 
-    def call(original_request, request_options = {})
-      request = request_klass.new(original_request, request_options)
-      response_klass.new(run_request(request)).rack_response
-    end
-
-    # Enforce trailing slash
-    def endpoint=(endpoint)
-      @endpoint = File.join(endpoint, '')
+    def call(original_request, local_options = {})
+      request = request_klass.new(original_request, request_options.deep_merge(local_options))
+      response_klass.new(original_request, run_request(request), response_options).rack_response
     end
 
     private
+
+    def request_klass
+      request_options[:klass] || Request
+    end
+
+    def request_options
+      (@options[:request] || {}).merge(@options[:permission_handler] || {})
+    end
+
+    def response_klass
+      response_options[:klass] || Response
+    end
+
+    def response_options
+      (@options[:response] || {}).merge(@options[:permission_handler] || {})
+    end
 
     def run_request(request)
       log_request request
@@ -70,6 +71,11 @@ module ApiValve
       ) do |config|
         config.adapter Faraday.default_adapter
       end
+    end
+
+    # Enforce trailing slash
+    def endpoint
+      @endpoint ||= File.join(@options[:endpoint], '')
     end
   end
 end

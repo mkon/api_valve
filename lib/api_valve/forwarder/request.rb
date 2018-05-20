@@ -21,7 +21,7 @@ module ApiValve
 
     def initialize(original_request, options = {})
       @original_request = original_request
-      @options = default_options.merge options
+      @options = options.with_indifferent_access
     end
 
     def method
@@ -63,13 +63,7 @@ module ApiValve
     private
 
     def whitelisted_headers
-      @options[:whitelisted_headers]
-    end
-
-    def default_options
-      {
-        whitelisted_headers: WHITELISTED_HEADERS
-      }
+      @options[:whitelisted_headers] || WHITELISTED_HEADERS
     end
   end
 end

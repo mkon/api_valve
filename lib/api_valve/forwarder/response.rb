@@ -2,15 +2,18 @@ module ApiValve
   # Wraps faraday response
   # Responsible for altering the response before it is returned
   class Forwarder::Response
-    attr_reader :original_response
+    attr_reader :original_request, :original_response
 
     WHITELISTED_HEADERS = %w(
       Content-Type
       Cache-Control
+      Location
     ).freeze
 
-    def initialize(original_response)
+    def initialize(original_request, original_response, options = {})
+      @original_request = original_request
       @original_response = original_response
+      @options = options.with_indifferent_access
     end
 
     def rack_response

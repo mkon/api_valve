@@ -23,8 +23,8 @@ RSpec.describe ApiValve::Forwarder do
   let(:options) do
     {
       endpoint: 'http://host/api',
-      request_klass: request_klass,
-      response_klass: response_klass
+      request: {klass: request_klass},
+      response: {klass: response_klass}
     }
   end
   let(:original_request) do
@@ -38,11 +38,12 @@ RSpec.describe ApiValve::Forwarder do
   end
 
   describe '#call' do
-    subject { forwarder.call(original_request, options) }
+    subject { forwarder.call(original_request, foo: 'bar') }
 
     it 'correctly instantiates the request' do
       subject
-      expect(request_klass).to have_received(:new).with(original_request, options)
+      expect(request_klass).to have_received(:new)
+        .with(original_request, options[:request].merge(foo: 'bar'))
     end
 
     it { is_expected.to have_requested(:get, 'http://host/api/some/path/abc?foo=bar') }
