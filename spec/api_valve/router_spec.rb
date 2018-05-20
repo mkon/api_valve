@@ -1,7 +1,17 @@
 RSpec.describe ApiValve::Router do
   subject(:router) { described_class.new }
 
-  let(:app) { router.tap { define_routes } }
+  let(:app) do
+    Class.new do
+      def initialize(router)
+        @router = router
+      end
+
+      def call(env)
+        @router.call Rack::Request.new(env)
+      end
+    end.new(router.tap { define_routes })
+  end
 
   %w(get head post put patch delete).each do |method|
     context "when routing #{method.upcase} requests" do

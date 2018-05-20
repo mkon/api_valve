@@ -1,3 +1,4 @@
+require 'active_support/callbacks'
 require 'active_support/configurable'
 require 'active_support/core_ext/class'
 require 'active_support/core_ext/hash'
