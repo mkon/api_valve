@@ -1,4 +1,8 @@
 module ApiValve
+  # This class is responsible to decide if a request is allowed or not, and can
+  # be extended with more ACL related features, for example returning a list of
+  # attributes that can be read or written.
+
   class Forwarder::PermissionHandler
     module RequestIntegration
       private
@@ -16,6 +20,8 @@ module ApiValve
       end
     end
 
+    # Returns an instance of the PermissionHandler, cached in the request env
+    # This allows re-use of the PermissionHandler by both Request and Response instances
     def self.instance(request, options)
       request.env['permission_handler'] ||= new(request, options)
     end
@@ -25,6 +31,8 @@ module ApiValve
       @options = options
     end
 
+    # Tells the request class if the request is allowed
+    # Simple implementation is always true. Override in your implementation.
     def request_allowed?
       true
     end

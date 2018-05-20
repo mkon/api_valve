@@ -1,4 +1,8 @@
 module ApiValve
+  # This class is responsible for forwarding the HTTP request to the
+  # designated endpoint. It is instanciated once per Proxy with relevant
+  # options, and called from the router.
+
   class Forwarder
     autoload :PermissionHandler, 'api_valve/forwarder/permission_handler'
     autoload :Request,           'api_valve/forwarder/request'
@@ -6,10 +10,16 @@ module ApiValve
 
     include Benchmarking
 
+    # Initialized with global options. Possible values are:
+    # request: Options for the request wrapper. See Request#new.
+    # response: Options for the response wrapper. See Response#new
     def initialize(options = {})
       @options = options.with_indifferent_access
     end
 
+    # Takes the original rack request with optional options and returns a rack response
+    # Instanciates the Request and Response classes and wraps them arround the original
+    # request and response.
     def call(original_request, local_options = {})
       request = request_klass.new(original_request, request_options.deep_merge(local_options))
       raise Error::Forbidden unless request.allowed?

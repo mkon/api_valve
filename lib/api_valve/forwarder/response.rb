@@ -1,6 +1,13 @@
 module ApiValve
   # Wraps faraday response
   # Responsible for altering the response before it is returned
+
+  # This class is wraps the original response. The rack_response method
+  # is called by the Forwarder to build the rack response that will be
+  # returned by the proxy.
+  # By changing this class, we can control how the request is published
+  # to the original caller
+
   class Forwarder::Response
     include Forwarder::PermissionHandler::RequestIntegration
 
@@ -18,6 +25,7 @@ module ApiValve
       @options = options.with_indifferent_access
     end
 
+    # Must return a rack compatible response array of status code, headers and body
     def rack_response
       [status, headers, [body]]
     end
