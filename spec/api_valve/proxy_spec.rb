@@ -12,7 +12,7 @@ RSpec.describe ApiValve::Proxy do
     let(:yaml_path) do
       Pathname.new(File.expand_path(__FILE__)).join('..', '..', 'fixtures', 'example.yml')
     end
-    let(:app) { described_class.from_yaml(yaml_path) }
+    let(:app) { described_class.from_yaml(File.read(yaml_path)) }
 
     it 'can read yaml' do
       get '/hello/you'

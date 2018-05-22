@@ -9,8 +9,8 @@ module ApiValve
     define_callbacks :call
 
     class << self
-      def from_yaml(file_path)
-        from_hash YAML.load_file(file_path)
+      def from_yaml(string)
+        from_hash YAML.load(string) # rubocop:disable Security/YAMLLoad
       end
 
       def from_hash(config)
