@@ -37,9 +37,13 @@ module ApiValve
     end
 
     def headers
-      WHITELISTED_HEADERS.each_with_object({}) do |k, h|
+      whitelisted_headers.each_with_object({}) do |k, h|
         h[k] = original_response.headers[k]
       end.compact
+    end
+
+    def whitelisted_headers
+      @options[:whitelisted_headers] || WHITELISTED_HEADERS
     end
 
     def body
