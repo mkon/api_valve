@@ -18,6 +18,7 @@ module ApiValve
       X-Forwarded-Host
       X-Forwarded-Port
       X-Forwarded-Proto
+      X-Real-IP
     ).freeze
     NOT_PREFIXED_HEADERS = %w(
       Content-Length
