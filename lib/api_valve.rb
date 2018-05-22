@@ -16,6 +16,7 @@ module ApiValve
   autoload :Error,          'api_valve/error'
   autoload :ErrorResponder, 'api_valve/error_responder'
   autoload :Forwarder,      'api_valve/forwarder'
+  autoload :Logger,         'api_valve/logger'
   autoload :Proxy,          'api_valve/proxy'
   autoload :Router,         'api_valve/router'
 
@@ -23,6 +24,7 @@ module ApiValve
 
   module Middleware
     autoload :ErrorHandling, 'api_valve/middleware/error_handling'
+    autoload :Logging,       'api_valve/middleware/logging'
   end
 
   config_accessor :logger do

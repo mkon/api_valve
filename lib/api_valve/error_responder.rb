@@ -39,7 +39,7 @@ module ApiValve
 
     def json_meta
       (@error.try(:to_hash).presence || {}).merge(
-        backtrace: ApiValve.expose_backtraces ? json_backtrace : nil
+        backtrace: ApiValve.expose_backtraces ? @error.backtrace : nil
       ).compact.presence
     end
   end

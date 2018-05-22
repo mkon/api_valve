@@ -1,12 +1,24 @@
 AllCops:
   TargetRubyVersion: 2.4
 
+Layout/LeadingCommentSpace:
+  Exclude:
+    - '**/*.ru'
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
 Lint/AssignmentInCondition:
   Enabled: false
 
+Metrics/AbcSize:
+  Exclude:
+    - lib/api_valve/middleware/logging.rb
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - lib/api_valve/middleware/logging.rb
+Metrics/BlockLength:
+  Exclude:
+    - '**/*.ru'
 Metrics/LineLength:
   Max: 120
 
@@ -15,6 +27,10 @@ Style/ClassAndModuleChildren:
 Style/ConditionalAssignment:
   Enabled: false
 Style/Documentation:
+  Enabled: false
+Style/FormatString:
+  Enabled: false
+Style/FormatStringToken:
   Enabled: false
 Style/FrozenStringLiteralComment:
   Enabled: false

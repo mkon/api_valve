@@ -1,3 +1,6 @@
+# Supress default rackup logging middleware
+#\ --quiet
+
 require 'api_valve'
 
 class MyPermissions < ApiValve::Forwarder::PermissionHandler
@@ -7,7 +10,7 @@ class MyPermissions < ApiValve::Forwarder::PermissionHandler
 end
 
 app = Rack::Builder.new do
-  use ApiValve::Middleware::ErrorHandling
+  use ApiValve::Middleware::Logging
 
   map '/api' do
     run ApiValve::Proxy.from_hash(
