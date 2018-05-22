@@ -55,6 +55,8 @@ module ApiValve
       end
       log_response response, elapsed_time
       response
+    rescue Faraday::ConnectionFailed
+      raise Error::ServiceUnavailable
     end
 
     def log_request(request)
