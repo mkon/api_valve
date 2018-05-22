@@ -39,6 +39,7 @@ module ApiValve
     def build_routes_from_config(config)
       config['routes']&.each do |route_config|
         method, path_regexp, request_override = *route_config.values_at('method', 'path', 'request')
+        method ||= %w(get head patch post put) # no method defined means all methods
         if route_config['raise']
           deny method, path_regexp, with: route_config['raise']
         else
