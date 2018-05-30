@@ -35,6 +35,10 @@ module ApiValve
     false
   end
 
+  config_accessor :config_paths do
+    []
+  end
+
   # :nocov:
   def self.configure
     yield config

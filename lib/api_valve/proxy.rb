@@ -1,22 +1,54 @@
-require 'byebug'
-
 module ApiValve
   class Proxy
     include ActiveSupport::Callbacks
 
     FORWARDER_OPTIONS = %w(endpoint request response permission_handler).freeze
 
+    class_attribute :permission_handler, :request, :response
+    self.permission_handler = Forwarder::PermissionHandler
+    self.request = Forwarder::Request
+    self.response = Forwarder::Response
+
     define_callbacks :call
 
     class << self
+      def from_config(file_name = nil)
+        file_name ||= name.underscore
+        path = find_config(file_name)
+        raise "Config not found for #{name.underscore}(.yml|.yml.erb) in #{ApiValve.config_paths.inspect}" unless path
+        yaml = File.read(path)
+        yaml = ERB.new(yaml, nil, '-').result if path.fnmatch? '*.erb'
+        from_yaml yaml
+      end
+
       def from_yaml(string)
         from_hash YAML.load(string) # rubocop:disable Security/YAMLLoad
       end
 
       def from_hash(config)
         config = config.with_indifferent_access
-        forwarder = Forwarder.new(config.slice(*FORWARDER_OPTIONS))
+        forwarder = Forwarder.new(forwarder_config(config))
         new(forwarder).tap { |proxy| proxy.build_routes_from_config config }
+      end
+
+      private
+
+      def find_config(file_name)
+        ApiValve.config_paths.each do |dir|
+          path = dir.join("#{file_name}.yml")
+          return path if path.exist?
+          path = dir.join("#{file_name}.yml.erb")
+          return path if path.exist?
+        end
+        nil
+      end
+
+      def forwarder_config(config)
+        {
+          permission_handler: {klass: permission_handler},
+          request: {klass: request},
+          response: {klass: response}
+        }.with_indifferent_access.deep_merge config.slice(*FORWARDER_OPTIONS)
       end
     end
 
