@@ -14,8 +14,9 @@ module ApiValve
     attr_reader :original_request, :original_response
 
     WHITELISTED_HEADERS = %w(
-      Content-Type
       Cache-Control
+      Content-Disposition
+      Content-Type
       Location
     ).freeze
 
