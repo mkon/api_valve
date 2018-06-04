@@ -28,12 +28,12 @@ module ApiValve::Middleware
         log_request
         log_url_params
         log_request_headers if Logging.log_request_headers
-        log_request_payload if Logging.log_request_payload
+        log_request_payload if Logging.log_request_body
       end
 
       def after_request
         log_response_headers if Logging.log_response_headers
-        log_response_payload if Logging.log_response_payload
+        log_response_payload if Logging.log_response_body
         log_response
       end
 
@@ -95,7 +95,7 @@ module ApiValve::Middleware
       false
     end
 
-    config_accessor :log_request_payload do
+    config_accessor :log_request_body do
       false
     end
 
@@ -103,7 +103,7 @@ module ApiValve::Middleware
       false
     end
 
-    config_accessor :log_response_payload do
+    config_accessor :log_response_body do
       false
     end
 
