@@ -39,12 +39,21 @@ module ApiValve
 
     def headers
       whitelisted_headers.each_with_object({}) do |k, h|
-        h[k] = original_response.headers[k]
+        if k == 'Location'
+          h[k] = adjust_location(original_response.headers[k])
+        else
+          h[k] = original_response.headers[k]
+        end
       end.compact
     end
 
     def whitelisted_headers
       @options[:whitelisted_headers] || WHITELISTED_HEADERS
+    end
+
+    def adjust_location(location)
+      return location if @options[:target_prefix] == @options[:local_prefix]
+      location&.gsub(/^#{@options[:target_prefix]}/, @options[:local_prefix])
     end
 
     def body

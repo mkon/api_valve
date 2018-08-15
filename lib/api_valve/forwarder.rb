@@ -15,6 +15,8 @@ module ApiValve
     # response: Options for the response wrapper. See Response#new
     def initialize(options = {})
       @options = options.with_indifferent_access
+      uri = URI(options[:endpoint])
+      @target_prefix = uri.path
     end
 
     # Takes the original rack request with optional options and returns a rack response
@@ -23,7 +25,14 @@ module ApiValve
     def call(original_request, local_options = {})
       request = request_klass.new(original_request, request_options.deep_merge(local_options))
       raise Error::Forbidden unless request.allowed?
-      response_klass.new(original_request, run_request(request), response_options).rack_response
+      response_klass.new(
+        original_request,
+        run_request(request),
+        response_options.merge(
+          target_prefix: @target_prefix,
+          local_prefix: original_request.env['SCRIPT_NAME']
+        )
+      ).rack_response
     end
 
     private
@@ -43,7 +52,8 @@ module ApiValve
 
     def response_options
       # integrate permission handler options as it is instantiated in the response
-      (@options[:response] || {}).merge(@options.slice(:permission_handler) || {})
+      (@options[:response] || {})
+        .merge(@options.slice(:permission_handler) || {})
     end
 
     def run_request(request)
