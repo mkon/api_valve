@@ -12,13 +12,15 @@ RSpec.describe ApiValve::Forwarder::Request do
   let(:original_request) { Rack::Request.new(env) }
   let(:env) do
     {
-      'REQUEST_METHOD'        => 'GET',
-      'QUERY_STRING'          => 'foo=bar&array[]=1&array[]=2',
-      'HTTP_X_FORWARDED_FOR'  => '127.0.0.1',
-      'HTTP_X_FORWARDED_HOST' => 'api.example.com',
-      'HTTP_X_FORWARDED_PORT' => '8080',
-      'HTTP_USER_AGENT'       => 'Faraday',
-      'HTTP_OTHER_HEADER'     => 'Ignored'
+      'REMOTE_ADDR'            => '10.0.0.21',
+      'REQUEST_METHOD'         => 'GET',
+      'QUERY_STRING'           => 'foo=bar&array[]=1&array[]=2',
+      'HTTP_X_FORWARDED_FOR'   => '212.122.121.211',
+      'HTTP_X_FORWARDED_HOST'  => 'api.example.com',
+      'HTTP_X_FORWARDED_PORT'  => '443',
+      'HTTP_X_FORWARDED_PROTO' => 'https',
+      'HTTP_USER_AGENT'        => 'Faraday',
+      'HTTP_OTHER_HEADER'      => 'Ignored'
     }
   end
 
@@ -65,10 +67,11 @@ RSpec.describe ApiValve::Forwarder::Request do
 
     it do # rubocop:disable RSpec/ExampleLength
       is_expected.to eq(
-        'User-Agent'       => 'Faraday',
-        'X-Forwarded-For'  => '127.0.0.1',
-        'X-Forwarded-Host' => 'api.example.com',
-        'X-Forwarded-Port' => '8080'
+        'User-Agent'        => 'Faraday',
+        'X-Forwarded-For'   => '212.122.121.211, 10.0.0.21',
+        'X-Forwarded-Host'  => 'api.example.com',
+        'X-Forwarded-Port'  => '443',
+        'X-Forwarded-Proto' => 'https'
       )
     end
   end

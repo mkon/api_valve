@@ -12,12 +12,7 @@ module ApiValve
     WHITELISTED_HEADERS = %w(
       Accept
       Content-Type
-      Forwarded
       User-Agent
-      X-Forwarded-For
-      X-Forwarded-Host
-      X-Forwarded-Port
-      X-Forwarded-Proto
       X-Real-IP
     ).freeze
     NOT_PREFIXED_HEADERS = %w(
@@ -58,7 +53,9 @@ module ApiValve
     def headers
       whitelisted_headers.each_with_object({}) do |key, h|
         h[key] = header(key)
-      end.merge('X-Request-Id' => Thread.current[:request_id]).compact
+      end.merge(forwarded_headers).merge(
+        'X-Request-Id' => Thread.current[:request_id]
+      ).compact
     end
 
     # Returns body to forward to the target endpoint
@@ -76,6 +73,21 @@ module ApiValve
     end
 
     private
+
+    def forwarded_headers
+      {
+        'X-Forwarded-For'   => x_forwarded_for,
+        'X-Forwarded-Host'  => original_request.host,
+        'X-Forwarded-Port'  => original_request.port.to_s,
+        'X-Forwarded-Proto' => original_request.scheme
+      }
+    end
+
+    def x_forwarded_for
+      (
+        header('X-Forwarded-For').to_s.split(', ') << original_request.env['REMOTE_ADDR']
+      ).join(', ')
+    end
 
     def header(name)
       name = "HTTP_#{name}" unless NOT_PREFIXED_HEADERS.include? name
