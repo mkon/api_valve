@@ -26,8 +26,8 @@ module ApiValve
     end
 
     # Is the request allowed? If it returns false, Forwarder will raise Error::Forbidden
-    def allowed?
-      permission_handler.request_allowed?
+    def check_permissions!
+      permission_handler.check_permissions!
     end
 
     # HTTP method to use when forwarding. Must return sym.

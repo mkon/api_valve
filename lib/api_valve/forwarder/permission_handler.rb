@@ -4,6 +4,8 @@ module ApiValve
   # attributes that can be read or written.
 
   class Forwarder::PermissionHandler
+    InsufficientPermissions = Class.new(Error::Forbidden)
+
     module RequestIntegration
       private
 
@@ -33,7 +35,8 @@ module ApiValve
 
     # Tells the request class if the request is allowed
     # Simple implementation is always true. Override in your implementation.
-    def request_allowed?
+    # Should raise InsufficientPermissions when not allowed
+    def check_permissions!
       true
     end
   end

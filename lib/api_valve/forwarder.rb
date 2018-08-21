@@ -24,7 +24,7 @@ module ApiValve
     # request and response.
     def call(original_request, local_options = {})
       request = request_klass.new(original_request, request_options.deep_merge(local_options))
-      raise Error::Forbidden unless request.allowed?
+      request.check_permissions!
       response_klass.new(
         original_request,
         run_request(request),

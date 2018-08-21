@@ -24,13 +24,12 @@ RSpec.describe ApiValve::Forwarder::Request do
     }
   end
 
-  describe '#allowed?' do
-    subject { request.allowed? }
+  describe '#check_permissions!' do
+    subject { -> { request.check_permissions! } }
 
     let(:permission_handler) do
-      instance_double(ApiValve::Forwarder::PermissionHandler, request_allowed?: allowed)
+      instance_double(ApiValve::Forwarder::PermissionHandler, check_permissions!: true)
     end
-    let(:allowed) { true }
 
     before do
       allow(ApiValve::Forwarder::PermissionHandler).to receive(:instance)
@@ -38,21 +37,22 @@ RSpec.describe ApiValve::Forwarder::Request do
     end
 
     it 'correctly instanciates the PermissionHandler' do
-      subject
+      subject.call
       expect(ApiValve::Forwarder::PermissionHandler).to have_received(:instance)
         .with(original_request, resource: 'foo')
     end
 
     context 'when the permission handler allows it' do
-      let(:allowed) { true }
-
-      it { is_expected.to eq true }
+      it { expect(subject.call).to eq true }
     end
 
     context 'when the permission handler disallows it' do
-      let(:allowed) { false }
+      before do
+        allow(permission_handler).to receive(:check_permissions!)
+          .and_raise(ApiValve::Forwarder::PermissionHandler::InsufficientPermissions)
+      end
 
-      it { is_expected.to eq false }
+      it { is_expected.to raise_error(ApiValve::Forwarder::PermissionHandler::InsufficientPermissions) }
     end
   end
 

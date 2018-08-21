@@ -10,7 +10,7 @@ RSpec.describe ApiValve::Forwarder do
       url_params: {'foo' => 'bar'},
       body: '',
       headers: {},
-      allowed?: true
+      check_permissions!: true
     )
   end
   let(:response_klass) { Class.new(ApiValve::Forwarder::Response) }
@@ -53,7 +53,10 @@ RSpec.describe ApiValve::Forwarder do
     it { is_expected.to eq rack_response }
 
     context 'when the request is not allowed' do
-      before { allow(request_klass_instance).to receive(:allowed?).and_return(false) }
+      before do
+        allow(request_klass_instance).to receive(:check_permissions!)
+          .and_raise(ApiValve::Forwarder::PermissionHandler::InsufficientPermissions)
+      end
 
       it 'raises an Forbidden error' do
         expect { subject }.to raise_error(ApiValve::Error::Forbidden)
