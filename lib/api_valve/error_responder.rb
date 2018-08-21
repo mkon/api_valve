@@ -7,7 +7,7 @@ module ApiValve
     def call
       [
         status,
-        {'Content-Type' => 'application/json'},
+        {'Content-Type' => 'application/vnd.api+json'},
         [MultiJson.dump({errors: [json_error]}, mode: :compat)]
       ]
     end
@@ -22,19 +22,26 @@ module ApiValve
 
     def json_error
       {
-        status: status,
-        code: json_code,
+        status: status.to_s,
+        code:   json_code,
+        title:  json_title,
         detail: json_detail,
-        meta: json_meta
+        meta:   json_meta
       }.compact
     end
 
     def json_code
-      @error.try(:code) || Rack::Utils::HTTP_STATUS_CODES[status]
+      @error.try(:code) || @error.class.name.demodulize.underscore
+    end
+
+    def json_title
+      @error.try(:title) || Rack::Utils::HTTP_STATUS_CODES[status]
     end
 
     def json_detail
-      @error.message != @error.class.to_s ? @error.message : nil
+      return if json_title == @error.message
+      return if @error.message == @error.class.name
+      @error.message
     end
 
     def json_meta

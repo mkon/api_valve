@@ -9,7 +9,7 @@ module ApiValve
         @app.call(env)
       rescue Exception => e # rubocop:disable Lint/RescueException
         log_error e
-        ErrorResponder.new(e).call
+        self.class.const_get(ApiValve.error_responder).new(e).call
       end
 
       private

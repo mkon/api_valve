@@ -62,8 +62,8 @@ module ApiValve
     def call(env)
       @request = Rack::Request.new(env)
       run_callbacks(:call) { @router.call(@request) }
-    rescue ApiValve::Error::Base => e
-      ErrorResponder.new(e).call
+    rescue ApiValve::Error => e
+      render_error e
     end
 
     delegate :add_route, to: :router
@@ -99,6 +99,12 @@ module ApiValve
       Array.wrap(methods).each do |method|
         router.public_send(method, path_regexp, ->(*_args) { raise ApiValve.const_get(with) })
       end
+    end
+
+    protected
+
+    def render_error(error)
+      self.class.const_get(ApiValve.error_responder).new(error).call
     end
   end
 end

@@ -31,6 +31,10 @@ module ApiValve
     Logger.new(STDOUT)
   end
 
+  config_accessor :error_responder do
+    'ApiValve::ErrorResponder'
+  end
+
   config_accessor :expose_backtraces do
     false
   end
