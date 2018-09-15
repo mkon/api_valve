@@ -4,6 +4,8 @@ require 'rubygems'
 require 'bundler'
 Bundler.require :default, 'test'
 
+require 'json_spec'
+
 require 'rack/test'
 require 'timecop'
 

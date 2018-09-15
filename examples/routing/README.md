@@ -1,4 +1,4 @@
-# Basic example
+# Routing example
 
 Simply run
 

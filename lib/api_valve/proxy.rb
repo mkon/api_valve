@@ -62,7 +62,7 @@ module ApiValve
     def call(env)
       @request = Rack::Request.new(env)
       run_callbacks(:call) { @router.call(@request) }
-    rescue ApiValve::Error => e
+    rescue ApiValve::Error::Client, ApiValve::Error::Server => e
       render_error e
     end
 
@@ -78,7 +78,7 @@ module ApiValve
           forward method, path_regexp, request_override
         end
       end
-      forward_all
+      forward_all unless config['routes']
     end
 
     def forward(methods, path_regexp = nil, request_override = {})

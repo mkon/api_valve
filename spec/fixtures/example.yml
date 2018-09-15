@@ -12,3 +12,4 @@ routes:
   - method: post
     responder: forbidden
     raise: Error::Forbidden
+  - method: any

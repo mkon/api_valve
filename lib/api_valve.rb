@@ -13,6 +13,7 @@ require 'logger'
 
 module ApiValve
   autoload :Benchmarking,   'api_valve/benchmarking'
+  autoload :Cascade,        'api_valve/cascade'
   autoload :Error,          'api_valve/error'
   autoload :ErrorResponder, 'api_valve/error_responder'
   autoload :Forwarder,      'api_valve/forwarder'

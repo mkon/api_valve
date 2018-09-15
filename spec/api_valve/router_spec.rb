@@ -49,7 +49,7 @@ RSpec.describe ApiValve::Router do
         it 'raises ApiValve::Error::NotFound if no patch matches' do
           expect {
             public_send(method, '/doesnotexist/path/somewhere')
-          }.to raise_error(ApiValve::Error::NotFound)
+          }.to raise_error(ApiValve::Error::NotRouted)
         end
       end
     end

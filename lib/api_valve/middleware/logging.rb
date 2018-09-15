@@ -91,21 +91,10 @@ module ApiValve::Middleware
       end
     end
 
-    config_accessor :log_request_headers do
-      false
-    end
-
-    config_accessor :log_request_body do
-      false
-    end
-
-    config_accessor :log_response_headers do
-      false
-    end
-
-    config_accessor :log_response_body do
-      false
-    end
+    config_accessor(:log_request_headers) { false }
+    config_accessor(:log_request_body) { false }
+    config_accessor(:log_response_headers) { false }
+    config_accessor(:log_response_body) { false }
 
     def initialize(app)
       @app = app
