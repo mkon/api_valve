@@ -25,10 +25,8 @@ module ApiValve
       @options = options.with_indifferent_access
     end
 
-    # Is the request allowed? If it returns false, Forwarder will raise Error::Forbidden
-    def check_permissions!
-      permission_handler.check_permissions!
-    end
+    # Called by forwarder before actual request is executed
+    delegate :check_permissions!, to: :permission_handler
 
     # HTTP method to use when forwarding. Must return sym.
     # Returns original request method

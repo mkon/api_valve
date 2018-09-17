@@ -33,9 +33,9 @@ module ApiValve
       @options = options
     end
 
-    # Tells the request class if the request is allowed
+    # Run permission checks
     # Simple implementation is always true. Override in your implementation.
-    # Should raise InsufficientPermissions when not allowed
+    # For example raise ApiValve::Error::Forbidden in certain conditions
     def check_permissions!
       true
     end

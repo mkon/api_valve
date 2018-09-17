@@ -55,7 +55,7 @@ RSpec.describe ApiValve::Forwarder do
     context 'when the request is not allowed' do
       before do
         allow(request_klass_instance).to receive(:check_permissions!)
-          .and_raise(ApiValve::Forwarder::PermissionHandler::InsufficientPermissions)
+          .and_raise(ApiValve::Error::Forbidden)
       end
 
       it 'raises an Forbidden error' do
