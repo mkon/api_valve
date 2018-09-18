@@ -16,7 +16,8 @@ module ApiValve
     def initialize(options = {})
       @options = options.with_indifferent_access
       uri = URI(options[:endpoint])
-      @target_prefix = uri.path
+      # Target prefix must be without trailing slash
+      @target_prefix = uri.path.gsub(%r{/$}, '')
     end
 
     # Takes the original rack request with optional options and returns a rack response

@@ -9,7 +9,7 @@ RSpec.describe 'Building a rack application', type: :feature do
           run ApiValve::Proxy.from_hash(endpoint: 'http://host2/api')
         end
         map '/catch3/prefix' do
-          run ApiValve::Proxy.from_hash(endpoint: 'http://host3/api')
+          run ApiValve::Proxy.from_hash(endpoint: 'http://host3/api/')
         end
       end
     end
