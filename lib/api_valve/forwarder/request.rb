@@ -60,6 +60,7 @@ module ApiValve
     # Override to control the payload that is passed through
     def body
       return unless %i(put post patch).include? method
+
       original_request.body.read
     end
 
@@ -67,6 +68,7 @@ module ApiValve
     # Override to control the query parameters that can be passed through
     def url_params
       return unless original_request.query_string.present?
+
       @url_params ||= Rack::Utils.parse_nested_query(original_request.query_string)
     end
 

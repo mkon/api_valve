@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'json_spec', '~> 1.1'
   s.add_development_dependency 'rack-test', '~> 0'
   s.add_development_dependency 'rspec', '~> 3'
-  s.add_development_dependency 'rubocop', '0.58.2'
+  s.add_development_dependency 'rubocop', '0.59.1'
   s.add_development_dependency 'rubocop-rspec', '1.25.1'
   s.add_development_dependency 'simplecov', '~> 0'
   s.add_development_dependency 'timecop', '~> 0'

@@ -7,6 +7,7 @@ module ApiValve
 
       def match(path_info)
         return {} if regexp.nil? # return empty 'match data' on catch all
+
         regexp.match(path_info)
       end
     end
@@ -63,6 +64,7 @@ module ApiValve
       # For security reasons do not allow URLs that could break out of the proxy namespace on the
       # server. Preferably an nxing/apache rewrite will kill these URLs before they hit us
       raise 'URL not supported' if request.path_info.include?('/../')
+
       @routes && @routes[request.request_method.downcase.to_sym].each do |route|
         if match_data = route.match(request.path_info)
           return route.call request, match_data

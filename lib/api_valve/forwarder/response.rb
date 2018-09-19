@@ -53,6 +53,7 @@ module ApiValve
 
     def adjust_location(location)
       return location if @options[:target_prefix] == @options[:local_prefix]
+
       location&.gsub(/^#{@options[:target_prefix]}/, @options[:local_prefix])
     end
 

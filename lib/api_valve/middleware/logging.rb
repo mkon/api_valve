@@ -52,6 +52,7 @@ module ApiValve::Middleware
 
       def log_url_params
         return unless env['QUERY_STRING'].present?
+
         logger.info URL_PARAMS % Rack::Utils.parse_nested_query(env['QUERY_STRING']).inspect
       end
 
@@ -60,25 +61,30 @@ module ApiValve::Middleware
         env.each_pair do |k, v|
           next unless k =~ /^HTTP_/ && v.present?
           next if v.blank? || (!k.start_with?('HTTP_') && !NON_STANDARD_REQUEST_HEADERS.include?(k))
+
           headers[k] = v
         end
         return if headers.empty?
+
         logger.debug REQUEST_HEADERS % headers
       end
 
       def log_request_payload
         return unless %w(PATCH POST PUT).include? env['REQUEST_METHOD']
+
         logger.debug REQUEST_PAYLOAD % env['rack.input'].read(1000)
         env['rack.input'].rewind
       end
 
       def log_response_headers
         return if response_headers&.empty?
+
         logger.debug RESPONSE_HEADERS % response_headers.inspect
       end
 
       def log_response_payload
         return if response_payload&.empty?
+
         logger.debug RESPONSE_PAYLOAD % response_payload.first(config_log_body_size)
       end
 
