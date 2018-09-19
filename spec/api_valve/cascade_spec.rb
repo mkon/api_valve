@@ -1,5 +1,5 @@
 RSpec.describe ApiValve::Cascade do
-  subject(:cascade) { described_class.new(*proxies) }
+  subject(:cascade) { described_class.new(proxies) }
 
   let(:proxies) do
     [

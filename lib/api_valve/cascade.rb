@@ -1,7 +1,7 @@
 module ApiValve
   class Cascade
     def initialize(*proxies)
-      @proxies = proxies
+      @proxies = Array.wrap(proxies).flatten
     end
 
     def call(env)
