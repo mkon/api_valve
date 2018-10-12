@@ -24,22 +24,29 @@ module ApiValve
     # Instanciates the Request and Response classes and wraps them arround the original
     # request and response.
     def call(original_request, local_options = {})
-      request = request_klass.new(original_request, request_options.deep_merge(local_options))
+      request = build_request(original_request, request_options.deep_merge(local_options))
       request.check_permissions!
-      response_klass.new(
-        original_request,
-        run_request(request),
-        response_options.merge(
-          target_prefix: @target_prefix,
-          local_prefix: original_request.env['SCRIPT_NAME']
-        )
-      ).rack_response
+      response = build_response(original_request, run_request(request), response_options)
+      response.rack_response
     end
 
     private
 
-    def request_klass
-      request_options[:klass] || Request
+    def build_request(original_request, options)
+      klass = options[:klass] || Request
+      klass.new(original_request, options)
+    end
+
+    def build_response(original_request, original_response, options)
+      klass = options[:klass] || Response
+      klass.new(
+        original_request,
+        original_response,
+        options.merge(
+          target_prefix: @target_prefix,
+          local_prefix: original_request.env['SCRIPT_NAME']
+        )
+      )
     end
 
     def request_options
@@ -47,14 +54,9 @@ module ApiValve
       (@options[:request] || {}).merge(@options.slice(:permission_handler))
     end
 
-    def response_klass
-      response_options[:klass] || Response
-    end
-
     def response_options
       # integrate permission handler options as it is instantiated in the response
-      (@options[:response] || {})
-        .merge(@options.slice(:permission_handler) || {})
+      (@options[:response] || {}).merge(@options.slice(:permission_handler) || {})
     end
 
     def run_request(request)

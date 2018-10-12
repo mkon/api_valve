@@ -17,3 +17,9 @@ Shows how routing is utilized to remap certain paths, or deny access.
 Shows how a custom permission handler is injected to require a secret API token.
 
 [Go to example](https://github.com/mkon/api_valve/tree/master/examples/permissions)
+
+## Rewriting
+
+Shows an advanced example of how parts of the URL are rewritten, turning them into HTTP headers.
+
+[Go to example](https://github.com/mkon/api_valve/tree/master/examples/rewriting)
