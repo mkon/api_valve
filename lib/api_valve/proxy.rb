@@ -12,6 +12,12 @@ module ApiValve
     define_callbacks :call
 
     class << self
+      def build(config, &block)
+        from_hash(config).tap do |proxy|
+          proxy.instance_eval(&block)
+        end
+      end
+
       def from_config(file_name = nil)
         file_name ||= name.underscore
         path = find_config(file_name)

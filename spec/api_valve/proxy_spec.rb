@@ -39,6 +39,30 @@ RSpec.describe ApiValve::Proxy do
     end
   end
 
+  describe '.build' do
+    let(:app) do
+      described_class.build(endpoint: 'http://service/api') do
+        router.get %r{^/foo/(\d+)/bar$} do |request, match_data|
+          forwarder.call request, path: "bazz/#{match_data[1]}/foo"
+        end
+      end
+    end
+
+    before do
+      stub_request(:get, %r{^http://service/api/}).to_return(status: 204)
+    end
+
+    it 'can be used to build a proxy' do
+      expect(app).to be_a(described_class)
+    end
+
+    it 'correctly parses the block' do
+      get '/foo/123/bar'
+      expect(last_response).to be_no_content
+      expect(WebMock).to have_requested(:get, 'http://service/api/foo/123/bar')
+    end
+  end
+
   %i(patch post put).each do |method|
     context "when forwarding #{method.to_s.upcase} requests" do
       let(:app) do
