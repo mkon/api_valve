@@ -1,6 +1,6 @@
 # ApiValve
 
-[![Gem Version](https://badge.fury.io/rb/fidor_api.svg)](https://badge.fury.io/rb/fidor_api)
+[![Gem Version](https://badge.fury.io/rb/api_valve.svg)](https://badge.fury.io/rb/fidor_api)
 [![Build Status](https://travis-ci.org/mkon/api_valve.svg?branch=master)](https://travis-ci.org/mkon/api_valve)
 
 Extensible rack application that serves as lightweight API reverse proxy.
