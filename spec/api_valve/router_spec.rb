@@ -24,7 +24,7 @@ RSpec.describe ApiValve::Router do
 
       it 'calls the route proc with correct args' do
         public_send(method, '/')
-        is_expected.to have_received(:call).with(instance_of(Rack::Request), {})
+        expect(route_proc).to have_received(:call).with(instance_of(Rack::Request), {})
       end
 
       context 'when calling specific paths' do

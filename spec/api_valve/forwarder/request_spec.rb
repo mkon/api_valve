@@ -63,10 +63,10 @@ RSpec.describe ApiValve::Forwarder::Request do
   end
 
   describe '#headers' do
-    subject { request.headers }
+    subject(:headers) { request.headers }
 
-    it do # rubocop:disable RSpec/ExampleLength
-      is_expected.to eq(
+    it 'exposes the headers correctly' do # rubocop:disable RSpec/ExampleLength
+      expect(headers).to eq(
         'User-Agent'        => 'Faraday',
         'X-Forwarded-For'   => '212.122.121.211, 10.0.0.21',
         'X-Forwarded-Host'  => 'api.example.com',
@@ -77,10 +77,10 @@ RSpec.describe ApiValve::Forwarder::Request do
   end
 
   describe '#url_params' do
-    subject { request.url_params }
+    subject(:url_params) { request.url_params }
 
-    it do
-      is_expected.to eq(
+    it 'exposes the url_params correctly' do
+      expect(url_params).to eq(
         'array' => %w(1 2),
         'foo'   => 'bar'
       )
