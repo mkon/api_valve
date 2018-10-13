@@ -2,6 +2,8 @@
 
 [![Gem Version](https://badge.fury.io/rb/api_valve.svg)](https://badge.fury.io/rb/fidor_api)
 [![Build Status](https://travis-ci.org/mkon/api_valve.svg?branch=master)](https://travis-ci.org/mkon/api_valve)
+[![Depfu](https://badges.depfu.com/badges/1f5892cc85d02997050e0a4d077c7dc4/status.svg)](https://depfu.com)
+[![Depfu](https://badges.depfu.com/badges/1f5892cc85d02997050e0a4d077c7dc4/overview.svg)](https://depfu.com/github/mkon/api_valve?project_id=5958)
 
 Extensible rack application that serves as lightweight API reverse proxy.
 
