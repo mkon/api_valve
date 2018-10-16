@@ -12,14 +12,17 @@ RSpec.describe ApiValve::Router do
       end
     end.new(router.tap { define_routes })
   end
+  let(:rack_response) { [200, {'Content-Type' => 'text/plain'}, ['OK']] }
 
   %w(get head post put patch delete).each do |method|
     context "when routing #{method.upcase} requests" do
-      subject(:route_proc) { instance_double(Proc, call: rack_response) }
-
-      let(:rack_response) { [200, {'Content-Type' => 'text/plain'}, ['OK']] }
+      let(:route_proc) { proc { rack_response } }
       let(:define_routes) do
-        router.send(method, nil, subject)
+        router.send(method, nil, route_proc)
+      end
+
+      before do
+        allow(route_proc).to receive(:call).and_call_original
       end
 
       it 'calls the route proc with correct args' do
@@ -29,7 +32,7 @@ RSpec.describe ApiValve::Router do
 
       context 'when calling specific paths' do
         let(:define_routes) do
-          router.send(method, %r{/exists/path}, subject)
+          router.send(method, %r{/exists/path}, route_proc)
           router.send(method, %r{/alsoexists/path}, ->(*_args) { rack_response })
         end
 
@@ -52,6 +55,25 @@ RSpec.describe ApiValve::Router do
           }.to raise_error(ApiValve::Error::NotRouted)
         end
       end
+    end
+  end
+
+  describe '#unshift' do
+    let(:define_routes) do
+      router.get %r{^/start}, proc1
+    end
+    let(:proc1) { proc { rack_response } }
+    let(:proc2) { proc { rack_response } }
+
+    before do
+      [proc1, proc2].each { |pr| allow(pr).to receive(:call).and_call_original }
+    end
+
+    it 'adds the route the the front' do
+      router.unshift(:get, %r{^/start}, proc2)
+      get '/start'
+      expect(proc1).not_to have_received(:call)
+      expect(proc2).to have_received(:call)
     end
   end
 end

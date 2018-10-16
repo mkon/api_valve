@@ -7,9 +7,6 @@ Layout/LeadingCommentSpace:
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
-Lint/AssignmentInCondition:
-  Enabled: false
-
 Metrics/AbcSize:
   Exclude:
     - lib/api_valve/middleware/logging.rb

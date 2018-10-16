@@ -23,3 +23,10 @@ Shows how a custom permission handler is injected to require a secret API token.
 Shows an advanced example of how parts of the URL are rewritten, turning them into HTTP headers.
 
 [Go to example](https://github.com/mkon/api_valve/tree/master/examples/rewriting)
+
+## Aggregation
+
+Shows an advanced example of how to programmatically inject a proc into the routes which makes
+multiple requests to form an aggregated response.
+
+[Go to example](https://github.com/mkon/api_valve/tree/master/examples/aggregation)
