@@ -37,8 +37,8 @@ module ApiValve
     # URL path to use when forwarding
     def path
       path = options['endpoint'] || ''
-      if pattern = options['path']
-        path += pattern % options.dig('match_data').named_captures.symbolize_keys
+      if (override = override_path(options))
+        path += override
       else
         path += original_request.path_info
       end
@@ -81,6 +81,13 @@ module ApiValve
         'X-Forwarded-Port'  => original_request.port.to_s,
         'X-Forwarded-Proto' => original_request.scheme
       }
+    end
+
+    def override_path(options)
+      return unless (path = options['path'])
+      return path unless options.dig('match_data')
+
+      path % options.dig('match_data').named_captures.symbolize_keys
     end
 
     def x_forwarded_for
