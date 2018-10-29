@@ -18,7 +18,7 @@ RSpec.describe 'Building a rack application', type: :feature do
       stub_request(:get, %r{^http://host1/}).to_return(status: 200, body: 'OK')
       stub_request(:get, %r{^http://host2/}).to_return(status: 200, body: 'OK')
       stub_request(:get, %r{^http://host3/}).to_return(
-        status: 301,
+        status:  301,
         headers: {'Location' => '/api/see/other/record'}
       )
     end

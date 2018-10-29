@@ -44,7 +44,7 @@ module ApiValve
         original_response,
         options.merge(
           target_prefix: @target_prefix,
-          local_prefix: original_request.env['SCRIPT_NAME']
+          local_prefix:  original_request.env['SCRIPT_NAME']
         )
       )
     end
@@ -76,9 +76,9 @@ module ApiValve
       ApiValve.logger.info do
         format(
           '-> %<method>s %<endpoint>s%<path>s',
-          method: request.method.upcase,
+          method:   request.method.upcase,
           endpoint: endpoint,
-          path: request.path
+          path:     request.path
         )
       end
     end
@@ -88,7 +88,7 @@ module ApiValve
         format(
           '<- %<status>s in %<ms>dms',
           status: response.status,
-          ms: elapsed_time * 1000
+          ms:     elapsed_time * 1000
         )
       end
     end

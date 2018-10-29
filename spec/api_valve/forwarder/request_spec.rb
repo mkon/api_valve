@@ -3,7 +3,7 @@ RSpec.describe ApiValve::Forwarder::Request do
 
   let(:options) do
     {
-      endpoint: 'http://host/api',
+      endpoint:           'http://host/api',
       permission_handler: {
         resource: 'foo'
       }

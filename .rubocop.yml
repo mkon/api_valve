@@ -1,6 +1,9 @@
 AllCops:
   TargetRubyVersion: 2.5
 
+Layout/AlignHash:
+  EnforcedColonStyle: table
+  EnforcedHashRocketStyle: table
 Layout/LeadingCommentSpace:
   Exclude:
     - '**/*.ru'

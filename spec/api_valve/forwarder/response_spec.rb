@@ -29,7 +29,7 @@ RSpec.describe ApiValve::Forwarder::Response do
       let(:options) do
         {
           target_prefix: '/remote-prefix',
-          local_prefix: '/proxy-prefix'
+          local_prefix:  '/proxy-prefix'
         }
       end
 
@@ -40,7 +40,7 @@ RSpec.describe ApiValve::Forwarder::Response do
       let(:options) do
         {
           target_prefix: '/remote-prefix',
-          local_prefix: ''
+          local_prefix:  ''
         }
       end
 
@@ -51,7 +51,7 @@ RSpec.describe ApiValve::Forwarder::Response do
       let(:options) do
         {
           target_prefix: '',
-          local_prefix: '/proxy-prefix'
+          local_prefix:  '/proxy-prefix'
         }
       end
       let(:response_headers) do
