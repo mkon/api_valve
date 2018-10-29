@@ -54,8 +54,8 @@ module ApiValve
       def forwarder_config(config)
         {
           permission_handler: {klass: permission_handler},
-          request: {klass: request},
-          response: {klass: response}
+          request:            {klass: request},
+          response:           {klass: response}
         }.with_indifferent_access.deep_merge config.slice(*FORWARDER_OPTIONS)
       end
     end

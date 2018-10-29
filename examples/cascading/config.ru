@@ -9,20 +9,20 @@ app = Rack::Builder.new do
 
   drinks = ApiValve::Proxy.from_hash(
     endpoint: 'http://drinks.host/api/',
-    routes: [
+    routes:   [
       {
         method: 'any',
-        path: %r{^/beer/}
+        path:   %r{^/beer/}
       }
     ]
   )
 
   foods = ApiValve::Proxy.from_hash(
     endpoint: 'http://foods.host/api/',
-    routes: [
+    routes:   [
       {
         method: 'any',
-        path: %r{^/snacks/}
+        path:   %r{^/snacks/}
       }
     ]
   )

@@ -5,11 +5,11 @@ RSpec.describe ApiValve::Forwarder do
   let(:request_klass_instance) do
     instance_double(
       request_klass,
-      method: :get,
-      path: 'some/path/abc',
-      url_params: {'foo' => 'bar'},
-      body: '',
-      headers: {},
+      method:             :get,
+      path:               'some/path/abc',
+      url_params:         {'foo' => 'bar'},
+      body:               '',
+      headers:            {},
       check_permissions!: true
     )
   end
@@ -24,7 +24,7 @@ RSpec.describe ApiValve::Forwarder do
   let(:options) do
     {
       endpoint: 'http://host/api',
-      request: {klass: request_klass},
+      request:  {klass: request_klass},
       response: {klass: response_klass}
     }
   end

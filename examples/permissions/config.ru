@@ -14,7 +14,7 @@ app = Rack::Builder.new do
 
   map '/api' do
     run ApiValve::Proxy.from_hash(
-      endpoint: 'http://api.host/api/',
+      endpoint:           'http://api.host/api/',
       permission_handler: {
         klass: MyPermissions
       }

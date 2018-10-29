@@ -1,6 +1,10 @@
 require: rubocop-rspec
 inherit_from: ../.rubocop.yml
 
+Layout/AlignHash:
+  EnforcedColonStyle: table
+  EnforcedHashRocketStyle: table
+
 Lint/UnneededCopDisableDirective:
   Enabled: false
 
