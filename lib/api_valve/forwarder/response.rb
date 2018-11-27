@@ -9,9 +9,10 @@ module ApiValve
   # to the original caller
 
   class Forwarder::Response
+    # FIXME: does response use permissions or check against them (here or in gem clients)?
     include Forwarder::PermissionHandler::RequestIntegration
 
-    attr_reader :original_request, :original_response
+    attr_reader :original_request, :original_response, :options
 
     WHITELISTED_HEADERS = %w(
       Cache-Control

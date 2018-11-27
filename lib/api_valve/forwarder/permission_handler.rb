@@ -10,7 +10,7 @@ module ApiValve
       private
 
       def permission_handler
-        permission_handler_klass.instance(@original_request, permission_handler_options)
+        permission_handler_klass.instance(original_request, permission_handler_options)
       end
 
       def permission_handler_klass
@@ -18,9 +18,13 @@ module ApiValve
       end
 
       def permission_handler_options
-        @options[:permission_handler] || {}
+        options[:permission_handler] || {}
       end
     end
+
+    attr_reader :request, :options
+
+    delegate :env, to: :request
 
     # Returns an instance of the PermissionHandler, cached in the request env
     # This allows re-use of the PermissionHandler by both Request and Response instances
