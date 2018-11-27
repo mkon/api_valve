@@ -1,6 +1,6 @@
 module ApiValve
   # This class is responsible for forwarding the HTTP request to the
-  # designated endpoint. It is instanciated once per Proxy with relevant
+  # designated endpoint. It is instantiated once per Proxy with relevant
   # options, and called from the router.
 
   class Forwarder
@@ -21,7 +21,7 @@ module ApiValve
     end
 
     # Takes the original rack request with optional options and returns a rack response
-    # Instanciates the Request and Response classes and wraps them arround the original
+    # Instantiates the Request and Response classes and wraps them around the original
     # request and response.
     def call(original_request, local_options = {})
       request = build_request(original_request, request_options.deep_merge(local_options))

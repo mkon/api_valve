@@ -11,7 +11,7 @@ module ApiValve
   class Forwarder::Response
     include Forwarder::PermissionHandler::RequestIntegration
 
-    attr_reader :original_request, :original_response
+    attr_reader :original_request, :original_response, :options
 
     WHITELISTED_HEADERS = %w(
       Cache-Control
