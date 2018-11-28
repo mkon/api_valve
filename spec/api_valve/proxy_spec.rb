@@ -5,7 +5,7 @@ RSpec.describe ApiValve::Proxy do
 
   describe '.from_yaml' do
     before do
-      stub_request(:get, %r{^http://hello/api/}).to_return(status: 204)
+      stub_request(:any, %r{^http://example/api/}).to_return(status: 204)
       stub_request(:get, %r{^http://outside/api/}).to_return(status: 204)
     end
 
@@ -17,13 +17,13 @@ RSpec.describe ApiValve::Proxy do
     it 'can read yaml' do
       get '/hello/you'
       expect(last_response).to be_no_content
-      expect(WebMock).to have_requested(:get, 'http://hello/api/you')
+      expect(WebMock).to have_requested(:get, 'http://example/api/you')
     end
 
     it 'can proxy url parmeters' do
       get '/something?foo=bar'
       expect(last_response).to be_no_content
-      expect(WebMock).to have_requested(:get, 'http://hello/api/something?foo=bar')
+      expect(WebMock).to have_requested(:get, 'http://example/api/something?foo=bar')
     end
 
     it 'can do other endpoints' do
@@ -35,7 +35,15 @@ RSpec.describe ApiValve::Proxy do
     it 'does forbidden' do
       post '/'
       expect(last_response).to be_forbidden
-      expect(WebMock).not_to have_requested(:get, %r{^http://hello/api/})
+      expect(WebMock).not_to have_requested(:get, %r{^http://example/api/})
+    end
+
+    it 'handles implicit any verbs' do
+      %i(get put post patch delete head).each do |verb|
+        public_send(verb, "/any/#{verb}")
+        expect(last_response).to be_no_content
+        expect(WebMock).to have_requested(verb, "http://example/api/via_any/#{verb}")
+      end
     end
   end
 

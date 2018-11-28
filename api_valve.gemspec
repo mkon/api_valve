@@ -3,7 +3,7 @@ $LOAD_PATH.push File.expand_path('lib', __dir__)
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = 'api_valve'
-  s.version     = ENV.fetch 'VERSION', '0.5.1'
+  s.version     = ENV.fetch 'VERSION', '0.5.2'
   s.authors     = ['mkon']
   s.email       = ['konstantin@munteanu.de']
   s.homepage    = 'https://github.com/mkon/api_valve'

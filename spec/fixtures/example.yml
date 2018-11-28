@@ -1,4 +1,4 @@
-endpoint: 'http://hello/api/'
+endpoint: 'http://example/api/'
 routes:
   - method: get
     path: !ruby/regexp /^\/hello\/(?<final_path>.*)/
@@ -9,6 +9,9 @@ routes:
     request:
       path: '%{final_path}'
       endpoint: 'http://outside/api/'
+  - path: !ruby/regexp /^\/any\/(?<suffix>.*)/
+    request:
+      path: '/via_any/%{suffix}'
   - method: post
     responder: forbidden
     raise: Error::Forbidden
