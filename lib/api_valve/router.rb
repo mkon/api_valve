@@ -16,8 +16,8 @@ module ApiValve
       reset_routes
     end
 
-    def call(request)
-      match request
+    def call(env)
+      match Rack::Request.new(env)
     end
 
     def delete(path = nil, prok = nil)

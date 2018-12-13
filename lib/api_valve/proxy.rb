@@ -9,8 +9,6 @@ module ApiValve
     self.request = Forwarder::Request
     self.response = Forwarder::Response
 
-    define_callbacks :call
-
     class << self
       def build(config, &block)
         from_hash(config).tap do |proxy|
@@ -65,11 +63,12 @@ module ApiValve
     def initialize(forwarder)
       @forwarder = forwarder
       @router = Router.new
+      @middlewares = []
     end
 
     def call(env)
-      @request = Rack::Request.new(env)
-      run_callbacks(:call) { @router.call(@request) }
+      stack = @middlewares.reverse.inject(@router) { |a, e| e.call a }
+      stack.call(env)
     rescue ApiValve::Error::Client, ApiValve::Error::Server => e
       render_error e
     end
@@ -107,6 +106,10 @@ module ApiValve
       Array.wrap(methods).each do |method|
         router.public_send(method, path_regexp, ->(*_args) { raise ApiValve.const_get(with) })
       end
+    end
+
+    def use(middleware, *args, &block)
+      @middlewares << proc { |app| middleware.new(app, *args, &block) }
     end
 
     protected

@@ -19,6 +19,11 @@ module RSpecMixin
   include Rack::Test::Methods
 end
 
-ApiValve.logger = Logger.new('/dev/null')
+require_relative './support/helper'
 
-RSpec.configure { |c| c.include RSpecMixin }
+ApiValve.logger = ActiveSupport::TaggedLogging.new(Logger.new('/dev/null'))
+
+RSpec.configure do |config|
+  config.include RSpecMixin
+  config.include Helper
+end

@@ -8,7 +8,7 @@ RSpec.describe ApiValve::Router do
       end
 
       def call(env)
-        @router.call Rack::Request.new(env)
+        @router.call env
       end
     end.new(router.tap { define_routes })
   end
