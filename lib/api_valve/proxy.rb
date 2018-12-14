@@ -10,9 +10,12 @@ module ApiValve
     self.response = Forwarder::Response
 
     class << self
-      def build(config, &block)
+      # Creates a n instance from a config hash and takes optional block
+      # which is executed in scope of the proxy
+      def build(config)
+        block = Proc.new if block_given? # capture the yield
         from_hash(config).tap do |proxy|
-          proxy.instance_eval(&block)
+          proxy.instance_eval(&block) if block
         end
       end
 
@@ -33,7 +36,10 @@ module ApiValve
       def from_hash(config)
         config = config.with_indifferent_access
         forwarder = Forwarder.new(forwarder_config(config))
-        new(forwarder).tap { |proxy| proxy.build_routes_from_config config }
+        new(forwarder).tap do |proxy|
+          Array.wrap(config[:use]).each { |mw| proxy.use mw }
+          proxy.build_routes_from_config config[:routes]
+        end
       end
 
       private
@@ -75,8 +81,10 @@ module ApiValve
 
     delegate :add_route, to: :router
 
-    def build_routes_from_config(config)
-      config['routes']&.each do |route_config|
+    def build_routes_from_config(routes_config)
+      return forward_all unless routes_config
+
+      routes_config.each do |route_config|
         method, path_regexp, request_override = *route_config.values_at('method', 'path', 'request')
         method ||= 'any' # no method defined means all methods
         if route_config['raise']
@@ -85,7 +93,6 @@ module ApiValve
           forward method, path_regexp, request_override
         end
       end
-      forward_all unless config['routes']
     end
 
     def forward(methods, path_regexp = nil, request_override = {})
