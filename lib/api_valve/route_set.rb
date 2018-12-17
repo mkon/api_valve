@@ -1,5 +1,5 @@
 module ApiValve
-  class Router
+  class RouteSet
     METHODS = %i(get post put patch delete head).freeze
 
     Route = Struct.new(:regexp, :block) do
@@ -16,8 +16,20 @@ module ApiValve
       reset_routes
     end
 
-    def call(env)
-      match Rack::Request.new(env)
+    def match(env)
+      request = Rack::Request.new(env)
+
+      # For security reasons do not allow URLs that could break out of the proxy namespace on the
+      # server. Preferably an nxing/apache rewrite will kill these URLs before they hit us
+      raise 'URL not supported' if request.path_info.include?('/../')
+
+      match_data = nil
+      route = @routes && @routes[request.request_method.downcase.to_sym].find do |r|
+        (match_data = r.match(request.path_info))
+      end
+      raise Error::NotRouted, 'Endpoint not found' unless route
+
+      [route, match_data]
     end
 
     def delete(path = nil, prok = nil)
@@ -64,21 +76,6 @@ module ApiValve
 
     def reset_routes
       @routes = Hash[METHODS.map { |v| [v, []] }].freeze
-    end
-
-    private
-
-    def match(request)
-      # For security reasons do not allow URLs that could break out of the proxy namespace on the
-      # server. Preferably an nxing/apache rewrite will kill these URLs before they hit us
-      raise 'URL not supported' if request.path_info.include?('/../')
-
-      @routes && @routes[request.request_method.downcase.to_sym].each do |route|
-        if (match_data = route.match(request.path_info))
-          return route.call request, match_data
-        end
-      end
-      raise Error::NotRouted, 'Endpoint not found'
     end
   end
 end

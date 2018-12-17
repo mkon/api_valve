@@ -24,7 +24,7 @@ app = Rack::Builder.new do
 
   proxy = ApiValve::Proxy.build(endpoint: 'https://jsonplaceholder.typicode.com') do
     use MyMiddleware, 'one'
-    use MyMiddleware, 'two'
+    middleware.insert_before ApiValve::Middleware::Router, MyMiddleware, 'two'
   end
 
   run proxy

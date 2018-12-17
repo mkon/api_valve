@@ -1,4 +1,4 @@
-module ApiValve::Middleware
+class ApiValve::Middleware
   class Logging
     include ActiveSupport::Configurable
 

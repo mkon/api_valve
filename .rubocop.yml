@@ -13,12 +13,14 @@ Layout/SpaceInsideHashLiteralBraces:
 Metrics/AbcSize:
   Exclude:
     - lib/api_valve/middleware/logging.rb
-Metrics/CyclomaticComplexity:
-  Exclude:
-    - lib/api_valve/middleware/logging.rb
 Metrics/BlockLength:
   Exclude:
     - '**/*.ru'
+Metrics/ClassLength:
+  Enabled: false
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - lib/api_valve/middleware/logging.rb
 Metrics/LineLength:
   Max: 120
 

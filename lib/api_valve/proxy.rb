@@ -64,22 +64,25 @@ module ApiValve
       end
     end
 
-    attr_reader :request, :forwarder, :router
+    attr_reader :request, :forwarder, :middleware, :route_set
+
+    alias router route_set
 
     def initialize(forwarder)
       @forwarder = forwarder
-      @router = Router.new
-      @middlewares = []
+      @route_set = RouteSet.new
+      @middleware = Middleware.new
+      use Middleware::Router, route_set
     end
 
     def call(env)
-      stack = @middlewares.reverse.inject(@router) { |a, e| e.call a }
-      stack.call(env)
+      to_app.call(env)
     rescue ApiValve::Error::Client, ApiValve::Error::Server => e
       render_error e
     end
 
-    delegate :add_route, to: :router
+    delegate :add_route, to: :route_set
+    delegate :use, to: :middleware
 
     def build_routes_from_config(routes_config)
       return forward_all unless routes_config
@@ -97,32 +100,32 @@ module ApiValve
 
     def forward(methods, path_regexp = nil, request_override = {})
       Array.wrap(methods).each do |method|
-        router.public_send(method, path_regexp, proc { |request, match_data|
+        route_set.public_send(method, path_regexp, proc { |request, match_data|
           forwarder.call request, {'match_data' => match_data}.merge(request_override || {})
         })
       end
     end
 
     def forward_all
-      router.any do |request, match_data|
+      route_set.any do |request, match_data|
         forwarder.call request, 'match_data' => match_data
       end
     end
 
     def deny(methods, path_regexp = nil, with: 'Error::Forbidden')
       Array.wrap(methods).each do |method|
-        router.public_send(method, path_regexp, ->(*_args) { raise ApiValve.const_get(with) })
+        route_set.public_send(method, path_regexp, ->(*_args) { raise ApiValve.const_get(with) })
       end
-    end
-
-    def use(middleware, *args, &block)
-      @middlewares << proc { |app| middleware.new(app, *args, &block) }
     end
 
     protected
 
     def render_error(error)
       self.class.const_get(ApiValve.error_responder).new(error).call
+    end
+
+    def to_app
+      @to_app ||= @middleware.to_app(Runner.new)
     end
   end
 end

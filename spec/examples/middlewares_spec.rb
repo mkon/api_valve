@@ -9,6 +9,6 @@ RSpec.describe 'Middleware example', type: :feature do
 
   it 'correctly runs the middleware' do
     get '/posts/1'
-    expect(last_response.headers['Middlewares']).to eq %w(one two).to_json
+    expect(last_response.headers['Middlewares']).to eq %w(two one).to_json
   end
 end
