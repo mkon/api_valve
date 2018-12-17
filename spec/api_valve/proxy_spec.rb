@@ -50,7 +50,7 @@ RSpec.describe ApiValve::Proxy do
   describe '.build' do
     let(:app) do
       described_class.build(endpoint: 'http://service/api') do
-        router.get %r{^/foo/(\d+)/bar$} do |request, match_data|
+        route_set.get %r{^/foo/(\d+)/bar$} do |request, match_data|
           forwarder.call request, path: "bazz/#{match_data[1]}/foo"
         end
       end
