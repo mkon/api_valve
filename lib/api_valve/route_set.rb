@@ -2,7 +2,7 @@ module ApiValve
   class RouteSet
     METHODS = %i(get post put patch delete head).freeze
 
-    Route = Struct.new(:regexp, :block) do
+    Route = Struct.new(:regexp, :options, :block) do
       delegate :call, to: :block
 
       def match(path_info)
@@ -24,7 +24,7 @@ module ApiValve
       raise 'URL not supported' if request.path_info.include?('/../')
 
       match_data = nil
-      route = @routes && @routes[request.request_method.downcase.to_sym].find do |r|
+      route = @routes && @routes[request.request_method.downcase].find do |r|
         (match_data = r.match(request.path_info))
       end
       raise Error::NotRouted, 'Endpoint not found' unless route
@@ -32,50 +32,55 @@ module ApiValve
       [route, match_data]
     end
 
-    def delete(path = nil, prok = nil)
-      append :delete, path, prok || Proc.new
+    def delete(path = nil, options = {}, prok = nil)
+      push :delete, path, options, prok || Proc.new
     end
 
-    def get(path = nil, prok = nil)
-      append :get, path, prok || Proc.new
+    def get(path = nil, options = {}, prok = nil)
+      push :get, path, options, prok || Proc.new
     end
 
-    def head(path = nil, prok = nil)
-      append :head, path, prok || Proc.new
+    def head(path = nil, options = {}, prok = nil)
+      push :head, path, options, prok || Proc.new
     end
 
-    def patch(path = nil, prok = nil)
-      append :patch, path, prok || Proc.new
+    def patch(path = nil, options = {}, prok = nil)
+      push :patch, path, options, prok || Proc.new
     end
 
-    def post(path = nil, prok = nil)
-      append :post, path, prok || Proc.new
+    def post(path = nil, options = {}, prok = nil)
+      push :post, path, options, prok || Proc.new
     end
 
-    def put(path = nil, prok = nil)
-      append :put, path, prok || Proc.new
+    def put(path = nil, options = {}, prok = nil)
+      push :put, path, options, prok || Proc.new
     end
 
-    def any(path = nil, prok = nil)
-      append METHODS, path, prok || Proc.new
+    def any(path = nil, options = {}, prok = nil)
+      append METHODS, path, options, prok || Proc.new
     end
 
-    def append(methods, regexp, prok = nil)
-      prok ||= Proc.new
-      Array.wrap(methods).each do |method|
-        @routes[method] << Route.new(regexp, prok)
-      end
+    def push(methods, regexp, options = {}, prok = nil)
+      add_route :push, methods, regexp, options, prok || Proc.new
     end
 
-    def unshift(methods, regexp = nil, prok = nil)
-      prok ||= Proc.new
-      Array.wrap(methods).each do |method|
-        @routes[method].unshift Route.new(regexp, prok)
-      end
+    alias append push
+
+    def unshift(methods, regexp = nil, options = {}, prok = nil)
+      add_route :unshift, methods, regexp, options, prok || Proc.new
     end
 
     def reset_routes
-      @routes = Hash[METHODS.map { |v| [v, []] }].freeze
+      @routes = Hash[METHODS.map { |v| [v, []] }].with_indifferent_access.freeze
+    end
+
+    private
+
+    def add_route(how, methods, regexp, options, prok)
+      methods = METHODS if methods.to_s == 'any'
+      Array.wrap(methods).each do |method|
+        @routes[method].public_send how, Route.new(regexp, options, prok)
+      end
     end
   end
 end

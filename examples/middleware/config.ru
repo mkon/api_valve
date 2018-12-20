@@ -4,17 +4,27 @@
 require 'api_valve'
 require 'byebug'
 
-class MyMiddleware
-  def initialize(app, arg)
+class TokenPresence
+  def initialize(app)
     @app = app
-    @arg = arg
   end
 
   def call(env)
-    env['middlewares'] ||= []
-    env['middlewares'] << @arg
-    status, headers, body = @app.call(env)
-    [status, headers.merge('Middlewares' => env['middlewares'].to_json), body]
+    if token_required?(env) && !token_present?(env)
+      [401, {'Content-Type' => 'text/plain'}, ['Unauthorized']]
+    else
+      @app.call(env)
+    end
+  end
+
+  private
+
+  def token_present?(env)
+    env['HTTP_AUTHORIZATION'] == 'Bearer secret-token'
+  end
+
+  def token_required?(env)
+    !env['api_valve.router.route'].options[:tokenless]
   end
 end
 
@@ -22,9 +32,11 @@ app = Rack::Builder.new do
   use ApiValve::Middleware::ErrorHandling
   use ApiValve::Middleware::Logging
 
-  proxy = ApiValve::Proxy.build(endpoint: 'https://jsonplaceholder.typicode.com') do
-    use MyMiddleware, 'one'
-    middleware.insert_before ApiValve::Middleware::Router, MyMiddleware, 'two'
+  proxy = ApiValve::Proxy.build(endpoint: 'http://api.host/api', routes: []) do
+    use TokenPresence
+
+    forward 'get', %r{^/public/}, tokenless: true
+    forward 'get', %r{^/private/}
   end
 
   run proxy

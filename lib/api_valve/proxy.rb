@@ -88,34 +88,28 @@ module ApiValve
       return forward_all unless routes_config
 
       routes_config.each do |route_config|
-        method, path_regexp, request_override = *route_config.values_at('method', 'path', 'request')
+        method, path_regexp = *route_config.values_at('method', 'path')
         method ||= 'any' # no method defined means all methods
         if route_config['raise']
           deny method, path_regexp, with: route_config['raise']
         else
-          forward method, path_regexp, request_override
+          forward method, path_regexp, route_config.except('method', 'path')
         end
       end
     end
 
-    def forward(methods, path_regexp = nil, request_override = {})
-      Array.wrap(methods).each do |method|
-        route_set.public_send(method, path_regexp, proc { |request, match_data|
-          forwarder.call request, {'match_data' => match_data}.merge(request_override || {})
-        })
-      end
+    def forward(methods, path_regexp = nil, options = {})
+      route_set.append(methods, path_regexp, options.except('request'), proc { |request, match_data|
+        forwarder.call request, {'match_data' => match_data}.merge(options['request'] || {})
+      })
     end
 
-    def forward_all
-      route_set.any do |request, match_data|
-        forwarder.call request, 'match_data' => match_data
-      end
+    def forward_all(options = {})
+      forward(RouteSet::METHODS, nil, options)
     end
 
     def deny(methods, path_regexp = nil, with: 'Error::Forbidden')
-      Array.wrap(methods).each do |method|
-        route_set.public_send(method, path_regexp, ->(*_args) { raise ApiValve.const_get(with) })
-      end
+      route_set.append(methods, path_regexp, {}, ->(*_args) { raise ApiValve.const_get(with) })
     end
 
     protected

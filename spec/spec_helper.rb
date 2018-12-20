@@ -13,7 +13,10 @@ require 'webmock/rspec'
 WebMock.disable_net_connect!
 
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start do
+  add_filter '/spec'
+end
+SimpleCov.minimum_coverage 90
 
 module RSpecMixin
   include Rack::Test::Methods
