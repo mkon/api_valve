@@ -1,8 +1,9 @@
 module ApiValve
   class Middleware
-    autoload :ErrorHandling, 'api_valve/middleware/error_handling'
-    autoload :Logging,       'api_valve/middleware/logging'
-    autoload :Router,        'api_valve/middleware/router'
+    autoload :ErrorHandling,   'api_valve/middleware/error_handling'
+    autoload :Logging,         'api_valve/middleware/logging'
+    autoload :PermissionCheck, 'api_valve/middleware/permission_check'
+    autoload :Router,          'api_valve/middleware/router'
 
     Item = Struct.new(:klass, :proc)
 

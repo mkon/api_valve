@@ -2,12 +2,7 @@ RSpec.describe ApiValve::Forwarder::Request do
   subject(:request) { described_class.new(original_request, options) }
 
   let(:options) do
-    {
-      endpoint:           'http://host/api',
-      permission_handler: {
-        resource: 'foo'
-      }
-    }
+    {endpoint: 'http://host/api'}
   end
   let(:original_request) { Rack::Request.new(env) }
   let(:env) do
@@ -22,38 +17,6 @@ RSpec.describe ApiValve::Forwarder::Request do
       'HTTP_USER_AGENT'        => 'Faraday',
       'HTTP_OTHER_HEADER'      => 'Ignored'
     }
-  end
-
-  describe '#check_permissions!' do
-    subject { -> { request.check_permissions! } }
-
-    let(:permission_handler) do
-      instance_double(ApiValve::Forwarder::PermissionHandler, check_permissions!: true)
-    end
-
-    before do
-      allow(ApiValve::Forwarder::PermissionHandler).to receive(:instance)
-        .and_return(permission_handler)
-    end
-
-    it 'correctly instanciates the PermissionHandler' do
-      subject.call
-      expect(ApiValve::Forwarder::PermissionHandler).to have_received(:instance)
-        .with(original_request, resource: 'foo')
-    end
-
-    context 'when the permission handler allows it' do
-      it { expect(subject.call).to eq true }
-    end
-
-    context 'when the permission handler disallows it' do
-      before do
-        allow(permission_handler).to receive(:check_permissions!)
-          .and_raise(ApiValve::Forwarder::PermissionHandler::InsufficientPermissions)
-      end
-
-      it { is_expected.to raise_error(ApiValve::Forwarder::PermissionHandler::InsufficientPermissions) }
-    end
   end
 
   describe '#method' do

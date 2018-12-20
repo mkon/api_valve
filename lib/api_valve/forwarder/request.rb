@@ -5,8 +5,6 @@ module ApiValve
   # request is forwarded
 
   class Forwarder::Request
-    include Forwarder::PermissionHandler::RequestIntegration
-
     attr_reader :original_request, :options
 
     WHITELISTED_HEADERS = %w(
@@ -24,9 +22,6 @@ module ApiValve
       @original_request = original_request
       @options = options.with_indifferent_access
     end
-
-    # Called by forwarder before actual request is executed
-    delegate :check_permissions!, to: :permission_handler
 
     # HTTP method to use when forwarding. Must return sym.
     # Returns original request method
@@ -70,6 +65,12 @@ module ApiValve
       return unless original_request.query_string.present?
 
       @url_params ||= Rack::Utils.parse_nested_query(original_request.query_string)
+    end
+
+    protected
+
+    def permission_handler
+      original_request.env['permission_handler']
     end
 
     private

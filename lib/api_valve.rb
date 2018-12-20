@@ -12,16 +12,17 @@ require 'multi_json'
 require 'logger'
 
 module ApiValve
-  autoload :Benchmarking,   'api_valve/benchmarking'
-  autoload :Cascade,        'api_valve/cascade'
-  autoload :Error,          'api_valve/error'
-  autoload :ErrorResponder, 'api_valve/error_responder'
-  autoload :Forwarder,      'api_valve/forwarder'
-  autoload :Middleware,     'api_valve/middleware'
-  autoload :Logger,         'api_valve/logger'
-  autoload :Proxy,          'api_valve/proxy'
-  autoload :RouteSet,       'api_valve/route_set'
-  autoload :Runner,         'api_valve/runner'
+  autoload :Benchmarking,      'api_valve/benchmarking'
+  autoload :Cascade,           'api_valve/cascade'
+  autoload :Error,             'api_valve/error'
+  autoload :ErrorResponder,    'api_valve/error_responder'
+  autoload :Forwarder,         'api_valve/forwarder'
+  autoload :Middleware,        'api_valve/middleware'
+  autoload :Logger,            'api_valve/logger'
+  autoload :PermissionHandler, 'api_valve/permission_handler'
+  autoload :Proxy,             'api_valve/proxy'
+  autoload :RouteSet,          'api_valve/route_set'
+  autoload :Runner,            'api_valve/runner'
 
   include ActiveSupport::Configurable
 

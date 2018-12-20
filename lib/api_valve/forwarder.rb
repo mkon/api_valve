@@ -4,9 +4,8 @@ module ApiValve
   # options, and called from the router.
 
   class Forwarder
-    autoload :PermissionHandler, 'api_valve/forwarder/permission_handler'
-    autoload :Request,           'api_valve/forwarder/request'
-    autoload :Response,          'api_valve/forwarder/response'
+    autoload :Request,  'api_valve/forwarder/request'
+    autoload :Response, 'api_valve/forwarder/response'
 
     include Benchmarking
 
@@ -25,7 +24,6 @@ module ApiValve
     # request and response.
     def call(original_request, local_options = {})
       request = build_request(original_request, request_options.deep_merge(local_options))
-      request.check_permissions!
       response = build_response(original_request, run_request(request), response_options)
       response.rack_response
     end
@@ -50,13 +48,11 @@ module ApiValve
     end
 
     def request_options
-      # integrate permission handler options as it is instantiated in the request
-      (@options[:request] || {}).merge(@options.slice(:permission_handler))
+      (@options[:request] || {})
     end
 
     def response_options
-      # integrate permission handler options as it is instantiated in the response
-      (@options[:response] || {}).merge(@options.slice(:permission_handler) || {})
+      (@options[:response] || {})
     end
 
     def run_request(request)

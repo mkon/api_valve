@@ -9,8 +9,6 @@ module ApiValve
   # to the original caller
 
   class Forwarder::Response
-    include Forwarder::PermissionHandler::RequestIntegration
-
     attr_reader :original_request, :original_response, :options
 
     WHITELISTED_HEADERS = %w(
@@ -29,6 +27,12 @@ module ApiValve
     # Must return a rack compatible response array of status code, headers and body
     def rack_response
       [status, headers, [body]]
+    end
+
+    protected
+
+    def permission_handler
+      original_request.env['permission_handler']
     end
 
     private

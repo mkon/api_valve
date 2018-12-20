@@ -3,9 +3,9 @@
 
 require 'api_valve'
 
-class MyPermissions < ApiValve::Forwarder::PermissionHandler
-  def check_permissions!
-    raise ApiValve::Error::Forbidden unless env['HTTP_AUTHORIZATION'] == 'Bearer my-api-token'
+class MyPermissions < ApiValve::PermissionHandler
+  def allowed?
+    env['HTTP_AUTHORIZATION'] == 'Bearer my-api-token'
   end
 end
 

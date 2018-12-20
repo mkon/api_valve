@@ -2,10 +2,10 @@ module ApiValve
   class Proxy
     include ActiveSupport::Callbacks
 
-    FORWARDER_OPTIONS = %w(endpoint request response permission_handler).freeze
+    FORWARDER_OPTIONS = %w(endpoint request response).freeze
 
     class_attribute :permission_handler, :request, :response
-    self.permission_handler = Forwarder::PermissionHandler
+    self.permission_handler = PermissionHandler
     self.request = Forwarder::Request
     self.response = Forwarder::Response
 
@@ -39,6 +39,7 @@ module ApiValve
         new(forwarder).tap do |proxy|
           Array.wrap(config[:use]).each { |mw| proxy.use mw }
           proxy.build_routes_from_config config[:routes]
+          proxy.use Middleware::PermissionCheck, config[:permission_handler] if config[:permission_handler]
         end
       end
 
@@ -57,9 +58,8 @@ module ApiValve
 
       def forwarder_config(config)
         {
-          permission_handler: {klass: permission_handler},
-          request:            {klass: request},
-          response:           {klass: response}
+          request:  {klass: request},
+          response: {klass: response}
         }.with_indifferent_access.deep_merge config.slice(*FORWARDER_OPTIONS)
       end
     end
@@ -99,8 +99,9 @@ module ApiValve
     end
 
     def forward(methods, path_regexp = nil, options = {})
-      route_set.append(methods, path_regexp, options.except('request'), proc { |request, match_data|
-        forwarder.call request, {'match_data' => match_data}.merge(options['request'] || {})
+      options = options.with_indifferent_access
+      route_set.append(methods, path_regexp, options.except(:request), proc { |request, match_data|
+        forwarder.call request, {'match_data' => match_data}.merge(options[:request] || {}).with_indifferent_access
       })
     end
 
