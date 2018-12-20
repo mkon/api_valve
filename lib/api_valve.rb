@@ -22,7 +22,6 @@ module ApiValve
   autoload :PermissionHandler, 'api_valve/permission_handler'
   autoload :Proxy,             'api_valve/proxy'
   autoload :RouteSet,          'api_valve/route_set'
-  autoload :Runner,            'api_valve/runner'
 
   include ActiveSupport::Configurable
 

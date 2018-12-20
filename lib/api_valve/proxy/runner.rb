@@ -1,5 +1,5 @@
 module ApiValve
-  class Runner
+  class Proxy::Runner
     def call(env)
       env['api_valve.router.route'].call \
         Rack::Request.new(env),
