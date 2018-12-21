@@ -18,6 +18,18 @@ RSpec.describe 'Permissions example', type: :request do
     it 'denies request' do
       get '/api'
       expect(last_response.status).to eq(403)
+      expect(last_response.body).to be_json_eql(
+        {
+          errors: [
+            {
+              code:   'forbidden',
+              detail: 'Insufficient permissions',
+              status: '403',
+              title:  'Forbidden'
+            }
+          ]
+        }.to_json
+      )
     end
   end
 end

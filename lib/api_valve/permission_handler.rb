@@ -11,6 +11,13 @@ module ApiValve
       true
     end
 
+    # Returns string message why access was denied
+    # Rendered on the API.
+    # Override in your implementation.
+    def message
+      'Insufficient permissions'
+    end
+
     protected
 
     attr_reader :env, :options

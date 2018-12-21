@@ -10,7 +10,9 @@ class ApiValve::Middleware
       if handler(env).allowed?
         @app.call(env)
       else
-        [403, {}, []]
+        message = handler(env).message
+        ApiValve.logger.info { message }
+        render_error ApiValve::Error::Forbidden.new message
       end
     end
 
@@ -25,6 +27,10 @@ class ApiValve::Middleware
 
     def handler_klass
       @options[:klass] || ApiValve::PermissionHandler
+    end
+
+    def render_error(error)
+      self.class.const_get(ApiValve.error_responder).new(error).call
     end
   end
 end
