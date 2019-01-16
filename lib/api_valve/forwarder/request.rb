@@ -12,6 +12,7 @@ module ApiValve
       Content-Type
       User-Agent
       X-Real-IP
+      X-Request-Id
     ).freeze
     NOT_PREFIXED_HEADERS = %w(
       Content-Length
@@ -46,9 +47,7 @@ module ApiValve
     def headers
       whitelisted_headers.each_with_object({}) do |key, h|
         h[key] = header(key)
-      end.merge(forwarded_headers).merge(
-        'X-Request-Id' => Thread.current[:request_id]
-      ).compact
+      end.merge(forwarded_headers).compact
     end
 
     # Returns body to forward to the target endpoint

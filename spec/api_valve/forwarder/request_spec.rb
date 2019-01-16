@@ -14,6 +14,7 @@ RSpec.describe ApiValve::Forwarder::Request do
       'HTTP_X_FORWARDED_HOST'  => 'api.example.com',
       'HTTP_X_FORWARDED_PORT'  => '443',
       'HTTP_X_FORWARDED_PROTO' => 'https',
+      'HTTP_X_REQUEST_ID'      => 'http-x-request-id-123',
       'HTTP_USER_AGENT'        => 'Faraday',
       'HTTP_OTHER_HEADER'      => 'Ignored'
     }
@@ -34,7 +35,8 @@ RSpec.describe ApiValve::Forwarder::Request do
         'X-Forwarded-For'   => '212.122.121.211, 10.0.0.21',
         'X-Forwarded-Host'  => 'api.example.com',
         'X-Forwarded-Port'  => '443',
-        'X-Forwarded-Proto' => 'https'
+        'X-Forwarded-Proto' => 'https',
+        'X-Request-Id'      => 'http-x-request-id-123'
       )
     end
   end
