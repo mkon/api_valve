@@ -6,11 +6,6 @@ module ApiValve
     Client = Class.new(self)
     Server = Class.new(self)
 
-    def initialize(*args)
-      @options = args.extract_options!
-      super(args.first || default_message)
-    end
-
     Rack::Utils::SYMBOL_TO_STATUS_CODE.each do |sym, code|
       case code
       when 400..499
@@ -22,6 +17,19 @@ module ApiValve
 
     NotRouted = Class.new(self) do
       self.http_status = 404
+    end
+
+    def initialize(*args)
+      @options = args.extract_options!
+      super(args.first || default_message)
+    end
+
+    def code
+      @options[:code] || self.class.code
+    end
+
+    def title
+      @options[:title] || self.class.title
     end
   end
 end
