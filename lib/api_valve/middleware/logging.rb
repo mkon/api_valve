@@ -77,13 +77,13 @@ class ApiValve::Middleware
       end
 
       def log_response_headers
-        return if response_headers&.empty?
+        return if response_headers.empty?
 
         logger.debug RESPONSE_HEADERS % response_headers.inspect
       end
 
       def log_response_payload
-        return if response_payload&.empty?
+        return if response_payload.empty?
 
         logger.debug RESPONSE_PAYLOAD % response_payload.first(config_log_body_size)
       end
