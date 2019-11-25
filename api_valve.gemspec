@@ -3,7 +3,7 @@ $LOAD_PATH.push File.expand_path('lib', __dir__)
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = 'api_valve'
-  s.version     = ENV.fetch 'VERSION', '0.7.2'
+  s.version     = ENV.fetch 'VERSION', '0.7.3'
   s.authors     = ['mkon']
   s.email       = ['konstantin@munteanu.de']
   s.homepage    = 'https://github.com/mkon/api_valve'
@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'json_spec', '~> 1.1'
   s.add_development_dependency 'rack-test', '~> 1.1'
   s.add_development_dependency 'rspec', '~> 3.7'
-  s.add_development_dependency 'rubocop', '0.75.1'
+  s.add_development_dependency 'rubocop', '0.76.0'
   s.add_development_dependency 'rubocop-rspec', '1.36.0'
   s.add_development_dependency 'simplecov', '~> 0.16'
   s.add_development_dependency 'timecop', '~> 0.9'

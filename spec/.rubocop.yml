@@ -5,7 +5,7 @@ Layout/AlignHash:
   EnforcedColonStyle: table
   EnforcedHashRocketStyle: table
 
-Lint/UnneededCopDisableDirective:
+Lint/RedundantCopDisableDirective:
   Enabled: false
 
 Metrics/BlockLength:
