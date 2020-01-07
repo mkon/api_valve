@@ -1,7 +1,7 @@
 require: rubocop-rspec
 inherit_from: ../.rubocop.yml
 
-Layout/AlignHash:
+Layout/HashAlignment:
   EnforcedColonStyle: table
   EnforcedHashRocketStyle: table
 
