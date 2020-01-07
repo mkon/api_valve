@@ -1,12 +1,14 @@
 AllCops:
   TargetRubyVersion: 2.5
 
-Layout/AlignHash:
+Layout/HashAlignment:
   EnforcedColonStyle: table
   EnforcedHashRocketStyle: table
 Layout/LeadingCommentSpace:
   Exclude:
     - '**/*.ru'
+Layout/LineLength:
+  Max: 120
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
@@ -21,8 +23,6 @@ Metrics/ClassLength:
 Metrics/CyclomaticComplexity:
   Exclude:
     - lib/api_valve/middleware/logging.rb
-Metrics/LineLength:
-  Max: 120
 
 Style/ClassAndModuleChildren:
   Enabled: false
