@@ -3,7 +3,7 @@ $LOAD_PATH.push File.expand_path('lib', __dir__)
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = 'api_valve'
-  s.version     = ENV.fetch 'VERSION', '0.7.3'
+  s.version     = ENV.fetch 'VERSION', '0.7.4'
   s.authors     = ['mkon']
   s.email       = ['konstantin@munteanu.de']
   s.homepage    = 'https://github.com/mkon/api_valve'
@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.files = Dir['lib/**/*', 'README.md']
 
   s.add_dependency 'activesupport', '>= 5', '< 7'
-  s.add_dependency 'faraday', '~> 0.14'
+  s.add_dependency 'faraday', '>= 0.14', '< 2'
   s.add_dependency 'multi_json', '~> 1.13'
   s.add_dependency 'rack', '~> 2'
 
