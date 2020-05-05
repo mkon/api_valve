@@ -69,7 +69,7 @@ module ApiValve
     end
 
     def log_request(request)
-      ApiValve.logger.info do
+      ApiValve.logger.debug do
         format(
           '-> %<method>s %<endpoint>s%<path>s',
           method:   request.method.upcase,
@@ -80,7 +80,7 @@ module ApiValve
     end
 
     def log_response(response, elapsed_time)
-      ApiValve.logger.info do
+      ApiValve.logger.debug do
         format(
           '<- %<status>s in %<ms>dms',
           status: response.status,
@@ -94,6 +94,7 @@ module ApiValve
         url: endpoint,
         ssl: {verify: false}
       ) do |config|
+        config.request :instrumentation
         config.adapter Faraday.default_adapter
       end
     end
