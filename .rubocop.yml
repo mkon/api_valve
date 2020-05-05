@@ -9,8 +9,15 @@ Layout/LeadingCommentSpace:
     - '**/*.ru'
 Layout/LineLength:
   Max: 120
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
+
+Lint/RaiseException:
+  Enabled: true
+Lint/StructNewOverride:
+  Enabled: true
 
 Metrics/AbcSize:
   Exclude:
@@ -30,8 +37,16 @@ Style/ConditionalAssignment:
   Enabled: false
 Style/Documentation:
   Enabled: false
+Style/ExponentialNotation:
+  Enabled: true
 Style/FormatString:
   Enabled: false
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
 Style/FormatStringToken:
   Enabled: false
 Style/FrozenStringLiteralComment:
