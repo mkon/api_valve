@@ -11,7 +11,7 @@ class ApiValve::Middleware
         @app.call(env)
       else
         message = handler(env).message
-        ApiValve.logger.info { message }
+        ApiValve.logger.debug { message }
         render_error ApiValve::Error::Forbidden.new message
       end
     end
