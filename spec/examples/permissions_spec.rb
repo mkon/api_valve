@@ -14,7 +14,7 @@ RSpec.describe 'Permissions example', type: :request do
     end
   end
 
-  context 'when providing the api token' do
+  context 'when not providing the api token' do
     it 'denies request' do
       get '/api'
       expect(last_response.status).to eq(403)
