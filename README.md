@@ -18,3 +18,21 @@ gem 'api_valve'
 
 See the [examples](https://github.com/mkon/api_valve/tree/master/examples) section on how to
 create & configure your own proxy using this gem.
+
+### Headers
+
+By default the following headers are forwarded:
+
+* `Accept`
+* `Content-Type`
+* `User-Agent`
+* `X-Real-IP`
+* `X-Request-Id`
+
+Additionally these headers are generated:
+
+* `X-Forwarded-For`: The ApiGateway is added to the list
+* `X-Forwarded-Host`: Filled with original request host
+* `X-Forwarded-Port`: Filled with original request port
+* `X-Forwarded-Prefix`: Filled with the path prefix of the forwarder within the Api Gateway (eg `SCRIPT_NAME` env)
+* `X-Forwarded-Proto`: Filled with original request scheme
