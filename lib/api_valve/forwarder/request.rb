@@ -76,11 +76,11 @@ module ApiValve
 
     def forwarded_headers
       {
-        'X-Forwarded-For'      => x_forwarded_for,
-        'X-Forwarded-Host'     => original_request.host,
-        'X-Forwarded-Port'     => original_request.port.to_s,
-        'X-Forwarded-Prefix'   => original_request.env['SCRIPT_NAME'].presence,
-        'X-Forwarded-Proto'    => original_request.scheme,
+        'X-Forwarded-For'    => x_forwarded_for,
+        'X-Forwarded-Host'   => original_request.host,
+        'X-Forwarded-Port'   => original_request.port.to_s,
+        'X-Forwarded-Prefix' => original_request.env['SCRIPT_NAME'].presence,
+        'X-Forwarded-Proto'  => original_request.scheme
       }.compact
     end
 
