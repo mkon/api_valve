@@ -16,7 +16,7 @@ module ApiValve
         raise "Config not found for #{name.underscore}(.yml|.yml.erb) in #{ApiValve.config_paths.inspect}" unless path
 
         yaml = File.read(path)
-        yaml = ERB.new(yaml, nil, '-').result if path.fnmatch? '*.erb'
+        yaml = ERB.new(yaml, trim_mode: '-').result if path.fnmatch? '*.erb'
         from_yaml yaml
       end
 

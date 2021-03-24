@@ -86,9 +86,9 @@ module ApiValve
 
     def override_path(options)
       return unless (path = options['path'])
-      return path unless options.dig('match_data')
+      return path unless options['match_data']
 
-      path % options.dig('match_data').named_captures.symbolize_keys
+      path % options['match_data'].named_captures.symbolize_keys
     end
 
     def x_forwarded_for

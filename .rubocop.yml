@@ -1,5 +1,6 @@
 AllCops:
-  TargetRubyVersion: 2.5
+  NewCops: enable
+  TargetRubyVersion: 2.6
 
 Layout/HashAlignment:
   EnforcedColonStyle: table
