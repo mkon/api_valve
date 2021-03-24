@@ -71,7 +71,7 @@ module ApiValve
     end
 
     def reset_routes
-      @routes = Hash[METHODS.map { |v| [v, []] }].with_indifferent_access.freeze
+      @routes = METHODS.map { |v| [v, []] }.to_h.with_indifferent_access.freeze
     end
 
     private

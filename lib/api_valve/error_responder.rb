@@ -16,7 +16,7 @@ module ApiValve
 
     def status
       status = @error.try(:http_status)
-      return status if status&.is_a?(Integer)
+      return status if status.is_a?(Integer)
 
       Rack::Utils::SYMBOL_TO_STATUS_CODE[status] || 500
     end

@@ -9,6 +9,7 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/mkon/api_valve'
   s.summary     = 'Lightweight ruby/rack API reverse proxy or gateway'
   s.license     = 'MIT'
+  s.required_ruby_version = '~> 2.6'
 
   s.files = Dir['lib/**/*', 'README.md']
 
@@ -20,8 +21,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'json_spec', '~> 1.1'
   s.add_development_dependency 'rack-test', '~> 1.1'
   s.add_development_dependency 'rspec', '~> 3.7'
-  s.add_development_dependency 'rubocop', '0.82.0'
-  s.add_development_dependency 'rubocop-rspec', '1.39.0'
+  s.add_development_dependency 'rubocop', '1.11.0'
+  s.add_development_dependency 'rubocop-rspec', '2.2.0'
   s.add_development_dependency 'simplecov', '~> 0.16'
   s.add_development_dependency 'timecop', '~> 0.9'
   s.add_development_dependency 'webmock', '~> 3.4'

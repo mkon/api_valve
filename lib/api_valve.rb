@@ -27,7 +27,7 @@ module ApiValve
   include ActiveSupport::Configurable
 
   config_accessor :logger do
-    Logger.new(STDOUT)
+    Logger.new($stdout)
   end
 
   config_accessor :error_responder do
