@@ -20,6 +20,9 @@ Lint/RaiseException:
 Lint/StructNewOverride:
   Enabled: true
 
+Naming/InclusiveLanguage:
+  Enabled: false
+
 Metrics/AbcSize:
   Exclude:
     - lib/api_valve/middleware/logging.rb
