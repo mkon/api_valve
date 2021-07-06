@@ -12,9 +12,9 @@ jobs:
       matrix:
         activesupport: ['5.2', '6.0', '6.1']
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     - name: Set up Ruby 2.6
-      uses: actions/setup-ruby@v2
+      uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.6.x
     - name: Bundle
@@ -28,7 +28,7 @@ jobs:
     - name: Rubocop
       run: bundle exec rubocop
 
-  test_ruby__27:
+  test_ruby_27:
     runs-on: ubuntu-latest
     strategy:
       matrix:
