@@ -6,7 +6,7 @@ on:
   push:
     branches: [master]
 jobs:
-  build_26:
+  test_ruby_26:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -28,7 +28,7 @@ jobs:
     - name: Rubocop
       run: bundle exec rubocop
 
-  build_26:
+  test_ruby__27:
     runs-on: ubuntu-latest
     strategy:
       matrix:
