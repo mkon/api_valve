@@ -2,14 +2,17 @@ RSpec.describe ApiValve::RouteSet do
   subject(:route_set) { described_class.new }
 
   let(:rack_response) { [200, {'Content-Type' => 'text/plain'}, ['OK']] }
-  let(:route_proc) { double(Proc, call: rack_response) } # rubocop:disable RSpec/VerifiedDoubles
+  let(:route_proc) { proc { rack_response } } # rubocop:disable RSpec/VerifiedDoubles
 
-  before { define_routes }
+  before do
+    allow(route_proc).to receive(:call).and_call_original
+    define_routes
+  end
 
   %w(get head post put patch delete).each do |method|
     context "when routing #{method.upcase} requests" do
       let(:define_routes) do
-        route_set.send(method, nil, {}, route_proc)
+        route_set.send(method, nil, {}, &route_proc)
       end
       let(:env) do
         {
@@ -26,8 +29,8 @@ RSpec.describe ApiValve::RouteSet do
 
       context 'when calling specific paths' do
         let(:define_routes) do
-          route_set.send(method, %r{/exists/path}, {}, route_proc)
-          route_set.send(method, %r{/alsoexists/path}, {}, ->(*_args) { [204, {}, []] })
+          route_set.send(method, %r{/exists/path}, {}, &route_proc)
+          route_set.send(method, %r{/alsoexists/path}, {}) { [204, {}, []] }
         end
         let(:env) do
           {
@@ -54,7 +57,7 @@ RSpec.describe ApiValve::RouteSet do
 
   describe '#unshift' do
     let(:define_routes) do
-      route_set.get %r{^/start}, {}, proc1
+      route_set.get(%r{^/start}, {}, &proc1)
     end
     let(:proc1) { proc { rack_response } }
     let(:proc2) { proc { rack_response } }
@@ -70,7 +73,7 @@ RSpec.describe ApiValve::RouteSet do
     end
 
     it 'adds the route the the front' do
-      route_set.unshift(:get, %r{^/start}, {}, proc2)
+      route_set.unshift(:get, %r{^/start}, {}, &proc2)
       route, _match_data = route_set.match(env)
       route.call
       expect(proc1).not_to have_received(:call)
