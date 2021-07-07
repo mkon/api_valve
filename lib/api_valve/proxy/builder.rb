@@ -1,10 +1,9 @@
 module ApiValve
   class Proxy
     module Builder
-      # Creates a n instance from a config hash and takes optional block
+      # Creates an instance from a config hash and takes optional block
       # which is executed in scope of the proxy
-      def build(config)
-        block = Proc.new if block_given? # capture the yield
+      def build(config, &block)
         from_hash(config).tap do |proxy|
           proxy.instance_eval(&block) if block
         end

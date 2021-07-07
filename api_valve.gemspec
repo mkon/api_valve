@@ -3,13 +3,13 @@ $LOAD_PATH.push File.expand_path('lib', __dir__)
 # Describe your gem and declare its dependencies:
 Gem::Specification.new do |s|
   s.name        = 'api_valve'
-  s.version     = ENV.fetch 'VERSION', '0.8.0'
+  s.version     = ENV.fetch 'VERSION', '1.0.0'
   s.authors     = ['mkon']
   s.email       = ['konstantin@munteanu.de']
   s.homepage    = 'https://github.com/mkon/api_valve'
   s.summary     = 'Lightweight ruby/rack API reverse proxy or gateway'
   s.license     = 'MIT'
-  s.required_ruby_version = '~> 2.6'
+  s.required_ruby_version = '>= 2.6', '< 3.1'
 
   s.files = Dir['lib/**/*', 'README.md']
 

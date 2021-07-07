@@ -34,9 +34,9 @@ module ApiValve
 
     def forward(methods, path_regexp = nil, options = {})
       options = options.with_indifferent_access
-      route_set.append(methods, path_regexp, options.except(:request), proc { |request, match_data|
+      route_set.append(methods, path_regexp, options.except(:request)) do |request, match_data|
         forwarder.call request, {'match_data' => match_data}.merge(options[:request] || {}).with_indifferent_access
-      })
+      end
     end
 
     def forward_all(options = {})
@@ -44,7 +44,7 @@ module ApiValve
     end
 
     def deny(methods, path_regexp = nil, with: 'Error::Forbidden')
-      route_set.append(methods, path_regexp, {}, ->(*_args) { raise ApiValve.const_get(with) })
+      route_set.append(methods, path_regexp, {}) { raise ApiValve.const_get(with) }
     end
 
     protected

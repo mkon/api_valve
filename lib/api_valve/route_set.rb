@@ -32,42 +32,42 @@ module ApiValve
       [route, match_data]
     end
 
-    def delete(path = nil, options = {}, prok = nil)
-      push :delete, path, options, prok || Proc.new
+    def delete(path = nil, options = {}, &block)
+      push :delete, path, options, &block
     end
 
-    def get(path = nil, options = {}, prok = nil)
-      push :get, path, options, prok || Proc.new
+    def get(path = nil, options = {}, &block)
+      push :get, path, options, &block
     end
 
-    def head(path = nil, options = {}, prok = nil)
-      push :head, path, options, prok || Proc.new
+    def head(path = nil, options = {}, &block)
+      push :head, path, options, &block
     end
 
-    def patch(path = nil, options = {}, prok = nil)
-      push :patch, path, options, prok || Proc.new
+    def patch(path = nil, options = {}, &block)
+      push :patch, path, options, &block
     end
 
-    def post(path = nil, options = {}, prok = nil)
-      push :post, path, options, prok || Proc.new
+    def post(path = nil, options = {}, &block)
+      push :post, path, options, &block
     end
 
-    def put(path = nil, options = {}, prok = nil)
-      push :put, path, options, prok || Proc.new
+    def put(path = nil, options = {}, &block)
+      push :put, path, options, &block
     end
 
-    def any(path = nil, options = {}, prok = nil)
-      append METHODS, path, options, prok || Proc.new
+    def any(path = nil, options = {}, &block)
+      append METHODS, path, options, &block
     end
 
-    def push(methods, regexp, options = {}, prok = nil)
-      add_route :push, methods, regexp, options, prok || Proc.new
+    def push(methods, regexp, options = {}, &block)
+      add_route :push, methods, regexp, options, &block
     end
 
     alias append push
 
-    def unshift(methods, regexp = nil, options = {}, prok = nil)
-      add_route :unshift, methods, regexp, options, prok || Proc.new
+    def unshift(methods, regexp = nil, options = {}, &block)
+      add_route :unshift, methods, regexp, options, &block
     end
 
     def reset_routes
@@ -76,10 +76,10 @@ module ApiValve
 
     private
 
-    def add_route(how, methods, regexp, options, prok)
+    def add_route(how, methods, regexp, options, &block)
       methods = METHODS if methods.to_s == 'any'
       Array.wrap(methods).each do |method|
-        @routes[method].public_send how, Route.new(regexp, options, prok)
+        @routes[method].public_send how, Route.new(regexp, options, block)
       end
     end
   end
