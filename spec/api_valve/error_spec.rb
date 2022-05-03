@@ -27,7 +27,7 @@ RSpec.describe ApiValve::Error do
       subject(:error) { described_class.new }
 
       it 'returns nil' do
-        expect(error.code).to be nil
+        expect(error.code).to be_nil
       end
     end
   end
@@ -53,7 +53,7 @@ RSpec.describe ApiValve::Error do
       subject(:error) { described_class.new }
 
       it 'returns nil' do
-        expect(error.title).to be nil
+        expect(error.title).to be_nil
       end
     end
   end
