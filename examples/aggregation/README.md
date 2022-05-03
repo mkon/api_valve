@@ -3,7 +3,7 @@
 Simply run
 
 ```
-rackup -p 8080
+rackup -q -p 8080
 ```
 
 Inspecting the `config.ru` you can see can run any ruby code inside a routing block. Here we utilize

@@ -8,7 +8,7 @@ was already proxied, but the target host returned 404).
 Simply run
 
 ```
-rackup -p 8080
+rackup -q -p 8080
 ```
 
 As you can see from the `config.ru`, it will forward all requests according to this table:
