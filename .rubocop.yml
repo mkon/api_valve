@@ -43,6 +43,8 @@ Style/Documentation:
   Enabled: false
 Style/ExponentialNotation:
   Enabled: true
+Style/FetchEnvVar:
+  Enabled: false
 Style/FormatString:
   Enabled: false
 Style/HashEachMethods:
