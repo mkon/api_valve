@@ -9,11 +9,11 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/mkon/api_valve'
   s.summary     = 'Lightweight ruby/rack API reverse proxy or gateway'
   s.license     = 'MIT'
-  s.required_ruby_version = '>= 2.6', '< 3.1'
+  s.required_ruby_version = '>= 2.7', '< 3.1'
 
   s.files = Dir['lib/**/*', 'README.md']
 
-  s.add_dependency 'activesupport', '>= 5', '< 7'
+  s.add_dependency 'activesupport', '>= 6.1', '< 7.1'
   s.add_dependency 'faraday', '>= 0.14', '<= 2.1.0'
   s.add_dependency 'multi_json', '~> 1.13'
   s.add_dependency 'rack', '~> 2'
@@ -26,5 +26,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'simplecov', '~> 0.16'
   s.add_development_dependency 'timecop', '~> 0.9'
   s.add_development_dependency 'webmock', '~> 3.4'
+
   s.metadata['rubygems_mfa_required'] = 'true'
 end

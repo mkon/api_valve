@@ -1,6 +1,3 @@
-# Supress default rackup logging middleware
-#\ --quiet
-
 require 'api_valve'
 
 class TransactionsRequest < ApiValve::Forwarder::Request
