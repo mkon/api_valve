@@ -4,9 +4,21 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
   push:
-    branches: [master]
+    branches: [main]
 jobs:
-  build:
+  rubocop:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.7
+        bundler-cache: true
+        cache-version: 7.0
+    - name: Rubocop
+      run: bundle exec rubocop
+  rspec:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -24,5 +36,3 @@ jobs:
         ACTIVESUPPORT: ${{ matrix.activesupport }}
     - name: Rspec
       run: bundle exec rspec
-    - name: Rubocop
-      run: bundle exec rubocop
