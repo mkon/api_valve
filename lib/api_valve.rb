@@ -43,6 +43,10 @@ module ApiValve
     []
   end
 
+  config_accessor :safe_load_classes do
+    [::Regexp]
+  end
+
   # :nocov:
   def self.configure
     yield config
