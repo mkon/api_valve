@@ -2,6 +2,9 @@ module ApiValve
   class Proxy
     module Builder
       cattr_accessor :safe_load_classes
+
+      # Change this value to allow additional classes
+      # ApiValve::Proxy::Builder.safe_load_classes += [...]
       self.safe_load_classes = [::Regexp]
 
       # Creates an instance from a config hash and takes optional block
