@@ -26,7 +26,7 @@ module ApiValve
 
     # Must return a rack compatible response array of status code, headers and body
     def rack_response
-      [status, headers, [body]]
+      Rack::Response.new(body, status, headers)
     end
 
     protected

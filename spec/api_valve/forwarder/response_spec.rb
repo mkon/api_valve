@@ -20,7 +20,7 @@ RSpec.describe ApiValve::Forwarder::Response do
     {'Location' => '/remote-prefix/see/other/path'}
   end
   let(:rack_response) { response.rack_response }
-  let(:headers) { rack_response[1] }
+  let(:headers) { rack_response.headers }
 
   describe 'Location header' do
     subject { headers['Location'] }

@@ -8,7 +8,7 @@ class ApiValve::Middleware
       @app.call(env)
     rescue Exception => e # rubocop:disable Lint/RescueException
       log_error e
-      self.class.const_get(ApiValve.error_responder).new(e).call
+      render_error(e).to_a
     end
 
     private
@@ -16,6 +16,10 @@ class ApiValve::Middleware
     def log_error(error)
       ApiValve.logger.error { "#{error.class}: #{error.message}" }
       ApiValve.logger.error { error.backtrace.join("\n") }
+    end
+
+    def render_error(error)
+      self.class.const_get(ApiValve.error_responder).new(error).call
     end
   end
 end

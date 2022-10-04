@@ -5,10 +5,10 @@ module ApiValve
     end
 
     def call
-      [
+      Rack::Response[
         status,
         {'Content-Type' => 'application/vnd.api+json'},
-        [MultiJson.dump({errors: [json_error]}, mode: :compat)]
+        MultiJson.dump({errors: [json_error]}, mode: :compat)
       ]
     end
 

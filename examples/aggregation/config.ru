@@ -1,4 +1,5 @@
 require 'api_valve'
+require 'byebug'
 
 app = Rack::Builder.new do
   use ApiValve::Middleware::ErrorHandling
@@ -9,11 +10,10 @@ app = Rack::Builder.new do
       threads = (1..5).map do |i|
         Thread.new { forwarder.call request, 'path' => "posts/#{i}" }
       end
-      threads.each(&:join)
       body = threads.map(&:value).map do |rack_response|
-        JSON.parse(rack_response[2].first)
+        JSON.parse(rack_response.body.first)
       end.to_json
-      [200, {'Content-Type' => 'application/json'}, [body]]
+      Rack::Response.new(body, 200, {'Content-Type' => 'application/json'})
     end
   end
 
