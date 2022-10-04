@@ -1,6 +1,5 @@
 RSpec.describe 'Rewriting example', type: :feature do
-  let(:builder) { example_app 'rewriting' }
-  let(:app) { builder[0] }
+  let(:app) { example_app 'rewriting' }
 
   before do
     stub_request(:get, %r{^http://api.host/api})

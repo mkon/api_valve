@@ -12,6 +12,7 @@ require 'benchmark'
 require 'faraday'
 require 'multi_json'
 require 'logger'
+require 'rack'
 
 module ApiValve
   autoload :Benchmarking,      'api_valve/benchmarking'

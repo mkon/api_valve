@@ -1,6 +1,5 @@
 RSpec.describe 'Permissions example', type: :request do
-  let(:builder) { example_app 'permissions' }
-  let(:app) { builder[0] }
+  let(:app) { example_app 'permissions' }
 
   before do
     stub_request(:get, %r{^http://api.host/api})
