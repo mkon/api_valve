@@ -10,7 +10,7 @@ require 'active_support/notifications'
 require 'active_support/rescuable'
 require 'benchmark'
 require 'faraday'
-require 'multi_json'
+require 'json'
 require 'logger'
 require 'rack'
 
