@@ -1,4 +1,5 @@
 require 'api_valve'
+require 'byebug'
 
 app = Rack::Builder.new do
   use ApiValve::Middleware::ErrorHandling
@@ -6,12 +7,15 @@ app = Rack::Builder.new do
 
   map '/api' do
     run ApiValve::Proxy.from_hash(
-      endpoint: 'http://api.host/api/',
+      endpoint: 'http://jsonplaceholder.typicode.com',
       routes:   [
         {
           method:  'get',
-          path:    %r{^/prefix/(?<final_path>.*)},
-          request: {path: '%{final_path}'}
+          path:    %r{^/customers/(?<path>.*)},
+          request: {path: '/users/%{path}'}
+        },
+        {
+          method: 'get'
         },
         {
           method: 'post',
