@@ -8,7 +8,7 @@ module ApiValve
       Rack::Response[
         status,
         {'Content-Type' => 'application/vnd.api+json'},
-        MultiJson.dump({errors: [json_error]}, mode: :compat)
+        JSON.generate({errors: [json_error]}, mode: :compat)
       ]
     end
 
