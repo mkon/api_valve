@@ -1,6 +1,5 @@
 RSpec.describe 'Middleware example', type: :feature do
-  let(:builder) { example_app 'middleware' }
-  let(:app) { builder[0] }
+  let(:app) { example_app 'middleware' }
 
   before do
     stub_request(:get, %r{^http://api.host/api})

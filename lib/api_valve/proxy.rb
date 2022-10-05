@@ -24,9 +24,9 @@ module ApiValve
     end
 
     def call(env)
-      to_app.call(env)
+      to_app.call(env).to_a
     rescue ApiValve::Error::Client, ApiValve::Error::Server => e
-      render_error e
+      render_error(e).to_a
     end
 
     delegate :add_route, to: :route_set

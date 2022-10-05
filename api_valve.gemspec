@@ -16,10 +16,11 @@ Gem::Specification.new do |s|
   s.add_dependency 'activesupport', '>= 6.1', '< 7.1'
   s.add_dependency 'faraday', '>= 0.14', '<= 2.5.2'
   s.add_dependency 'multi_json', '~> 1.13'
-  s.add_dependency 'rack', '~> 2'
+  s.add_dependency 'rack', '>= 2', '< 4'
 
   s.add_development_dependency 'json_spec', '~> 1.1'
   s.add_development_dependency 'rack-test', '~> 2.0'
+  s.add_development_dependency 'rackup'
   s.add_development_dependency 'rspec', '~> 3.7'
   s.add_development_dependency 'rubocop', '1.36.0'
   s.add_development_dependency 'rubocop-rspec', '2.13.1'
