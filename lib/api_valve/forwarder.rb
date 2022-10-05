@@ -4,8 +4,9 @@ module ApiValve
   # options, and called from the router.
 
   class Forwarder
-    autoload :Request,  'api_valve/forwarder/request'
-    autoload :Response, 'api_valve/forwarder/response'
+    autoload :LocationConverter,  'api_valve/forwarder/location_converter'
+    autoload :Request,            'api_valve/forwarder/request'
+    autoload :Response,           'api_valve/forwarder/response'
 
     include Benchmarking
 
