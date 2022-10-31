@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rackup'
   s.add_development_dependency 'rspec', '~> 3.7'
   s.add_development_dependency 'rubocop', '1.37.1'
-  s.add_development_dependency 'rubocop-rspec', '2.13.2'
+  s.add_development_dependency 'rubocop-rspec', '2.14.2'
   s.add_development_dependency 'simplecov', '~> 0.16'
   s.add_development_dependency 'timecop', '~> 0.9'
   s.add_development_dependency 'webmock', '~> 3.4'
