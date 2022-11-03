@@ -56,9 +56,15 @@ module ApiValve
     end
 
     def adjust_location(location)
-      return location if @options[:target_prefix] == @options[:local_prefix]
+      return unless location
 
-      location&.gsub(/^#{@options[:target_prefix]}/, @options[:local_prefix])
+      Forwarder::LocationConverter.new(
+        URI(location),
+        @options.slice(:local_prefix, :target_prefix).merge(
+          request_uri:  URI(@original_request.url),
+          response_uri: @original_response.env.url # already a URI
+        )
+      ).call
     end
 
     def body
