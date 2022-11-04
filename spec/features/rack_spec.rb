@@ -1,4 +1,4 @@
-RSpec.describe 'Building a rack application', type: :feature do
+RSpec.describe 'Building a rack application' do
   context 'with more then one mapping' do
     let(:app) do
       Rack::Builder.new do
