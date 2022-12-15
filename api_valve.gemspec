@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rack-test', '~> 2.0'
   s.add_development_dependency 'rackup'
   s.add_development_dependency 'rspec', '~> 3.7'
-  s.add_development_dependency 'rubocop', '1.39.0'
+  s.add_development_dependency 'rubocop', '1.40.0'
   s.add_development_dependency 'rubocop-rspec', '2.15.0'
   s.add_development_dependency 'simplecov', '~> 0.16'
   s.add_development_dependency 'timecop', '~> 0.9'
