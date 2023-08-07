@@ -22,7 +22,7 @@ module RSpecMixin
   include Rack::Test::Methods
 end
 
-require_relative './support/helper'
+require_relative 'support/helper'
 
 ApiValve.logger = ActiveSupport::TaggedLogging.new(Logger.new('/dev/null'))
 
