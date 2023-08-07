@@ -11,12 +11,12 @@ module ApiValve
       @registry = []
     end
 
-    def insert_after(other, middleware, *args, &block)
-      @registry.insert position(other) + 1, to_item(middleware, *args, &block)
+    def insert_after(other, ...)
+      @registry.insert position(other) + 1, to_item(...)
     end
 
-    def insert_before(other, middleware, *args, &block)
-      @registry.insert position(other), to_item(middleware, *args, &block)
+    def insert_before(other, ...)
+      @registry.insert position(other), to_item(...)
     end
 
     def to_app(root_app)
@@ -27,8 +27,8 @@ module ApiValve
       @registry.map(&:klass).join("\n")
     end
 
-    def use(middleware, *args, &block)
-      @registry << to_item(middleware, *args, &block)
+    def use(...)
+      @registry << to_item(...)
     end
 
     private
@@ -37,8 +37,8 @@ module ApiValve
       @registry.index { |item| item.klass == klass }
     end
 
-    def to_item(middleware, *args, &block)
-      Item.new(middleware, proc { |app| middleware.new(app, *args, &block) })
+    def to_item(middleware, ...)
+      Item.new(middleware, proc { |app| middleware.new(app, ...) })
     end
   end
 end
