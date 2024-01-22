@@ -45,7 +45,7 @@ class ApiValve::Middleware
         logger.info INCOMING % [
           env['REQUEST_METHOD'],
           [env['PATH_INFO'], env['QUERY_STRING'].presence].compact.join('?'),
-          (env['HTTP_X_FORWARDED_FOR'] || env['REMOTE_ADDR']),
+          env['HTTP_X_FORWARDED_FOR'] || env['REMOTE_ADDR'],
           began_at.strftime('%Y-%m-%d %H:%M:%S %z')
         ]
       end

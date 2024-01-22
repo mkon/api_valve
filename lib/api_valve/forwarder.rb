@@ -49,11 +49,11 @@ module ApiValve
     end
 
     def request_options
-      (@options[:request] || {})
+      @options[:request] || {}
     end
 
     def response_options
-      (@options[:response] || {})
+      @options[:response] || {}
     end
 
     def run_request(request)
